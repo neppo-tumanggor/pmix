@@ -1,0 +1,34 @@
+import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+
+@Entity('products')
+export class Product {
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  @Column({ length: 255 })
+  name: string;
+
+  @Column({ type: 'text', nullable: true })
+  description: string;
+
+  @Column({ type: 'decimal', precision: 10, scale: 2 })
+  price: number;
+
+  @Column({ length: 100, nullable: true })
+  category: string;
+
+  @Column({ default: 0 })
+  stock: number;
+
+  @Column({ length: 500, nullable: true })
+  imageUrl: string;
+
+  @Column({ default: true })
+  isActive: boolean;
+
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
+}
