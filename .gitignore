@@ -1,7 +1,14 @@
-# compiled output
-/dist
-/node_modules
-/build
+# Dependencies
+node_modules
+.pnpm-store
+
+# Build outputs
+dist
+.next
+out
+build
+.turbo
+*.tsbuildinfo
 
 # Logs
 logs
@@ -9,48 +16,70 @@ logs
 npm-debug.log*
 pnpm-debug.log*
 yarn-debug.log*
-yarn-error.log*
 lerna-debug.log*
 
-# OS
-.DS_Store
+# Environment
+.env
+.env.*.local
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
 
-# Tests
-/coverage
-/.nyc_output
+# Testing
+coverage
+.nyc_output
 
-# IDEs and editors
-/.idea
-.project
-.classpath
-.c9/
-*.launch
-.settings/
-*.sublime-workspace
-
-# IDE - VSCode
+# IDEs
 .vscode/*
 !.vscode/settings.json
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
+.idea
+*.swp
+*.swo
+.project
+.classpath
+.settings/
 
-# dotenv environment variable files
-.env
-.env.development.local
-.env.test.local
-.env.production.local
-.env.local
+# OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
 
-# temp directory
+# Temporary
 .temp
 .tmp
+*.temp
+*.tmp
 
 # Runtime data
 pids
 *.pid
-*.seed
 *.pid.lock
+*.seed
 
-# Diagnostic reports (https://nodejs.org/api/report.html)
+# Database
+*.sqlite
+*.db
+
+# Uploads
+uploads/
+public/uploads/
+
+# Diagnostic reports
 report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
+
+# Docker
+docker-compose*.yml
+Dockerfile*
+.dockerignore
+
+# Documentation build
+docs/_build
+dist/data-source.js

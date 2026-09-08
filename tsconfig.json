@@ -1,22 +1,28 @@
 {
   "compilerOptions": {
+    "target": "ES2023",
     "module": "nodenext",
     "moduleResolution": "nodenext",
     "resolvePackageJsonExports": true,
     "esModuleInterop": true,
-    "isolatedModules": true,
-    "declaration": true,
-    "removeComments": true,
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
     "allowSyntheticDefaultImports": true,
-    "target": "ES2023",
-    "sourceMap": true,
-    "outDir": "./dist",
-    "incremental": true,
-    "skipLibCheck": true,
     "strict": true,
     "strictPropertyInitialization": false,
-    "types": ["vitest/globals", "node"]
+    "noEmit": true,
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "lib": ["ES2023"],
+    "types": ["node"],
+    "baseUrl": ".",
+    "paths": {
+      "@mixer/backend/*": ["apps/backend/src/*"],
+      "@mixer/frontend/*": ["apps/frontend/src/*"],
+      "@mixer/shared-types": ["packages/shared-types/src"],
+      "@mixer/shared-ui": ["packages/shared-ui/src"],
+      "@mixer/shared-utils": ["packages/shared-utils/src"]
+    }
   }
 }

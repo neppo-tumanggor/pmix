@@ -1,9 +1,11 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { getDatabaseConfig } from './config/database.config';
 import { ProductsModule } from './modules/products/products.module';
 import { AuthModule } from './modules/auth/auth.module';
+import { SettingsModule } from './modules/settings/settings.module';
+import { UsersModule } from './modules/users/users.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 
@@ -19,6 +21,8 @@ import { AppService } from './app.service';
     }),
     AuthModule,
     ProductsModule,
+    SettingsModule,
+    UsersModule,
   ],
   controllers: [AppController],
   providers: [AppService],

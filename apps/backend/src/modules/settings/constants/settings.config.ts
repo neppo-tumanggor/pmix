@@ -1,0 +1,6 @@
+export const SETTINGS_CONFIG = {
+  CACHE_TTL: 300, // 5 minutes in seconds
+  ENCRYPTION_ALGORITHM: 'aes-256-gcm',
+  MAX_SETTING_VALUE_SIZE: 1048576, // 1MB
+  DEFAULT_SETTINGS_LIMIT: 100,
+} as const;
