@@ -37,6 +37,7 @@ import { AUTH_CONFIG } from './constants/auth.config';
       global: true,
     }),
     MailerModule.forRootAsync({
+      imports: [ConfigModule],
       useFactory: (configService: ConfigService) => ({
         transport: {
           host: configService.get('SMTP_HOST') || 'smtp.gmail.com',
@@ -54,10 +55,11 @@ import { AUTH_CONFIG } from './constants/auth.config';
       inject: [ConfigService],
     }),
     ThrottlerModule.forRootAsync({
+      imports: [ConfigModule],
       useFactory: (configService: ConfigService) => ({
         ttl: parseInt(configService.get('AUTH_THROTTLE_TTL') || '900000', 10),
         limit: parseInt(configService.get('AUTH_THROTTLE_LIMIT') || '5', 10),
-      }),
+      } as any),
       inject: [ConfigService],
     }),
     ConfigModule,

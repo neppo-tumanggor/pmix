@@ -7,7 +7,7 @@ import {
   Request,
   HttpCode,
   HttpStatus,
-  IP,
+  Ip,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
@@ -19,7 +19,6 @@ import { ResetPasswordDto } from './dto/reset-password.dto';
 import { ChangePasswordDto } from './dto/change-password.dto';
 import { VerifyEmailDto } from './dto/verify-email.dto';
 import { ResendVerificationDto } from './dto/resend-verification.dto';
-import { LoginResponse, RegisterResponse } from './interfaces/auth-response.interface';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { Public } from './decorators/public.decorator';
 import { CurrentUser } from './decorators/current-user.decorator';
@@ -33,10 +32,10 @@ export class AuthController {
   @Post('register')
   @Public()
   @ApiOperation({ summary: 'Register new user' })
-  @ApiResponse({ status: 201, description: 'User registered successfully', type: RegisterResponse })
+  @ApiResponse({ status: 201, description: 'User registered successfully' })
   @ApiResponse({ status: 409, description: 'Email already exists' })
   @ApiResponse({ status: 400, description: 'Validation failed' })
-  async register(@Body() registerDto: RegisterDto): Promise<RegisterResponse> {
+  async register(@Body() registerDto: RegisterDto): Promise<any> {
     return this.authService.register(registerDto);
   }
 
@@ -44,10 +43,10 @@ export class AuthController {
   @Public()
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Login user' })
-  @ApiResponse({ status: 200, description: 'Login successful', type: LoginResponse })
+  @ApiResponse({ status: 200, description: 'Login successful' })
   @ApiResponse({ status: 401, description: 'Invalid credentials' })
   @ApiResponse({ status: 403, description: 'Account locked or email not verified' })
-  async login(@Body() loginDto: LoginDto, @IP() ipAddress?: string): Promise<LoginResponse> {
+  async login(@Body() loginDto: LoginDto, @Ip() ipAddress?: string): Promise<any> {
     return this.authService.login(loginDto, ipAddress);
   }
 
@@ -55,9 +54,9 @@ export class AuthController {
   @Public()
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Refresh access token' })
-  @ApiResponse({ status: 200, description: 'Token refreshed successfully', type: LoginResponse })
+  @ApiResponse({ status: 200, description: 'Token refreshed successfully' })
   @ApiResponse({ status: 401, description: 'Invalid or expired refresh token' })
-  async refresh(@Body() refreshTokenDto: RefreshTokenDto): Promise<LoginResponse> {
+  async refresh(@Body() refreshTokenDto: RefreshTokenDto): Promise<any> {
     return this.authService.refreshToken(refreshTokenDto);
   }
 

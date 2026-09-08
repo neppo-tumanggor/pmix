@@ -11,9 +11,6 @@ export function getDatabaseConfig(configService: ConfigService): TypeOrmModuleOp
     database: configService.get('DB_DATABASE', 'mixer_dev'),
     entities: [__dirname + '/../../modules/**/*.entity{.ts,.js}'],
     migrations: [__dirname + '/../../migrations/*{.ts,.js}'],
-    cli: {
-      migrationsDir: './migrations',
-    },
     synchronize: configService.get('DB_SYNCHRONIZE', false),
     logging: configService.get('DB_LOGGING', false),
     ssl: configService.get('DB_SSL', false) ? { rejectUnauthorized: false } : false,
