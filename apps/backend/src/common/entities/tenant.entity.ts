@@ -1,10 +1,11 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, DeleteDateColumn } from 'typeorm';
+import { Entity, PrimaryColumn, Column, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, BeforeInsert } from 'typeorm';
+import { generateUuid } from '../../shared/utils/uuid.util';
 
 export abstract class TenantEntity {
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryColumn({ type: 'varchar', length: 36 })
   id: string;
 
-  @Column({ name: 'tenant_id', length: 255 })
+  @Column({ name: 'tenant_id', type: 'varchar', length: 255 })
   tenantId: string;
 
   @CreateDateColumn({ name: 'created_at' })
@@ -15,4 +16,12 @@ export abstract class TenantEntity {
 
   @DeleteDateColumn({ name: 'deleted_at', nullable: true })
   deletedAt: Date;
+
+  // Auto-generate UUID before insert
+  @BeforeInsert()
+  generateId() {
+    if (!this.id) {
+      this.id = generateUuid();
+    }
+  }
 }

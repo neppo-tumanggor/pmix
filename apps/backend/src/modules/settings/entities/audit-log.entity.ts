@@ -46,14 +46,14 @@ export class AuditLog extends TenantEntity {
 
   @Column({
     name: 'old_values',
-    type: 'jsonb',
+    type: 'simple-json',
     nullable: true,
   })
   oldValues: Record<string, any>;
 
   @Column({
     name: 'new_values',
-    type: 'jsonb',
+    type: 'simple-json',
     nullable: true,
   })
   newValues: Record<string, any>;

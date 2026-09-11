@@ -42,7 +42,7 @@ export class Settings extends TenantEntity {
 
   @Column({
     name: 'value',
-    type: 'jsonb',
+    type: 'simple-json',
   })
   value: Record<string, any>;
 

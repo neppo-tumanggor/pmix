@@ -1,4 +1,4 @@
-import { MigrationInterface, QueryRunner, Table, TableIndex, TableForeignKey } from 'typeorm';
+import { MigrationInterface, QueryRunner, Table, TableIndex } from 'typeorm';
 
 export class CreateAuthTables20260907154627 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
@@ -9,10 +9,9 @@ export class CreateAuthTables20260907154627 implements MigrationInterface {
         columns: [
           {
             name: 'id',
-            type: 'uuid',
+            type: 'varchar',
+            length: '36',
             isPrimary: true,
-            generationStrategy: 'uuid',
-            default: 'uuid_generate_v4()',
           },
           { name: 'email', type: 'varchar', length: '255', isUnique: true },
           { name: 'password', type: 'varchar', length: '255' },
@@ -36,7 +35,7 @@ export class CreateAuthTables20260907154627 implements MigrationInterface {
           },
           {
             name: 'email_verification_expires',
-            type: 'timestamp',
+            type: 'datetime',
             isNullable: true,
           },
           {
@@ -48,7 +47,7 @@ export class CreateAuthTables20260907154627 implements MigrationInterface {
           },
           {
             name: 'password_reset_expires',
-            type: 'timestamp',
+            type: 'datetime',
             isNullable: true,
           },
           {
@@ -58,12 +57,12 @@ export class CreateAuthTables20260907154627 implements MigrationInterface {
           },
           {
             name: 'locked_until',
-            type: 'timestamp',
+            type: 'datetime',
             isNullable: true,
           },
           {
             name: 'last_login',
-            type: 'timestamp',
+            type: 'datetime',
             isNullable: true,
           },
           {
@@ -73,17 +72,15 @@ export class CreateAuthTables20260907154627 implements MigrationInterface {
           },
           {
             name: 'created_at',
-            type: 'timestamp',
-            default: 'CURRENT_TIMESTAMP',
+            type: 'datetime',
           },
           {
             name: 'updated_at',
-            type: 'timestamp',
-            default: 'CURRENT_TIMESTAMP',
+            type: 'datetime',
           },
           {
             name: 'deleted_at',
-            type: 'timestamp',
+            type: 'datetime',
             isNullable: true,
           },
         ],
@@ -115,28 +112,15 @@ export class CreateAuthTables20260907154627 implements MigrationInterface {
         columns: [
           {
             name: 'id',
-            type: 'uuid',
+            type: 'varchar',
+            length: '36',
             isPrimary: true,
-            generationStrategy: 'uuid',
-            default: 'uuid_generate_v4()',
           },
           { name: 'token', type: 'varchar', length: '255', isUnique: true },
-          { name: 'user_id', type: 'uuid', isNullable: false },
-          {
-            name: 'expires_at',
-            type: 'timestamp',
-            isNullable: false,
-          },
-          {
-            name: 'revoked',
-            type: 'boolean',
-            default: false,
-          },
-          {
-            name: 'created_at',
-            type: 'timestamp',
-            default: 'CURRENT_TIMESTAMP',
-          },
+          { name: 'user_id', type: 'varchar', length: '36', isNullable: false },
+          { name: 'expires_at', type: 'datetime', isNullable: false },
+          { name: 'revoked', type: 'boolean', default: false },
+          { name: 'created_at', type: 'datetime' },
         ],
         foreignKeys: [
           {
@@ -157,12 +141,11 @@ export class CreateAuthTables20260907154627 implements MigrationInterface {
         columns: [
           {
             name: 'id',
-            type: 'uuid',
+            type: 'varchar',
+            length: '36',
             isPrimary: true,
-            generationStrategy: 'uuid',
-            default: 'uuid_generate_v4()',
           },
-          { name: 'user_id', type: 'uuid', isNullable: false },
+          { name: 'user_id', type: 'varchar', length: '36', isNullable: false },
           { name: 'token', type: 'varchar', length: '255', isUnique: true },
           {
             name: 'ip_address',
@@ -170,21 +153,9 @@ export class CreateAuthTables20260907154627 implements MigrationInterface {
             length: '45',
             isNullable: true,
           },
-          {
-            name: 'user_agent',
-            type: 'text',
-            isNullable: true,
-          },
-          {
-            name: 'last_activity',
-            type: 'timestamp',
-            default: 'CURRENT_TIMESTAMP',
-          },
-          {
-            name: 'created_at',
-            type: 'timestamp',
-            default: 'CURRENT_TIMESTAMP',
-          },
+          { name: 'user_agent', type: 'text', isNullable: true },
+          { name: 'last_activity', type: 'datetime',  },
+          { name: 'created_at', type: 'datetime',  },
         ],
         foreignKeys: [
           {
@@ -205,18 +176,13 @@ export class CreateAuthTables20260907154627 implements MigrationInterface {
         columns: [
           {
             name: 'id',
-            type: 'uuid',
+            type: 'varchar',
+            length: '36',
             isPrimary: true,
-            generationStrategy: 'uuid',
-            default: 'uuid_generate_v4()',
           },
-          { name: 'user_id', type: 'uuid', isNullable: false },
+          { name: 'user_id', type: 'varchar', length: '36', isNullable: false },
           { name: 'password_hash', type: 'varchar', length: '255' },
-          {
-            name: 'created_at',
-            type: 'timestamp',
-            default: 'CURRENT_TIMESTAMP',
-          },
+          { name: 'created_at', type: 'datetime',  },
         ],
         foreignKeys: [
           {

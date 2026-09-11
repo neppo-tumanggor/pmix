@@ -1,12 +1,14 @@
 import {
   Entity,
-  PrimaryGeneratedColumn,
+  PrimaryColumn,
   Column,
   CreateDateColumn,
   UpdateDateColumn,
   DeleteDateColumn,
   OneToMany,
+  BeforeInsert,
 } from 'typeorm';
+import { generateUuid } from '../../../shared/utils/uuid.util';
 import { RefreshToken } from './refresh-token.entity';
 import { Session } from './session.entity';
 import { PasswordHistory } from './password-history.entity';
@@ -19,7 +21,7 @@ export enum UserRole {
 
 @Entity('users')
 export class User {
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryColumn({ type: 'varchar', length: 36 })
   id: string;
 
   @Column({ unique: true, length: 255 })
@@ -44,22 +46,22 @@ export class User {
   @Column({ name: 'email_verification_token', length: 255, nullable: true })
   emailVerificationToken: string;
 
-  @Column({ name: 'email_verification_expires', type: 'timestamp', nullable: true })
+  @Column({ name: 'email_verification_expires', type: 'datetime', nullable: true })
   emailVerificationExpires: Date;
 
   @Column({ name: 'password_reset_token', length: 255, nullable: true, unique: true })
   passwordResetToken: string;
 
-  @Column({ name: 'password_reset_expires', type: 'timestamp', nullable: true })
+  @Column({ name: 'password_reset_expires', type: 'datetime', nullable: true })
   passwordResetExpires: Date;
 
   @Column({ name: 'failed_login_attempts', default: 0 })
   failedLoginAttempts: number;
 
-  @Column({ name: 'locked_until', type: 'timestamp', nullable: true })
+  @Column({ name: 'locked_until', type: 'datetime', nullable: true })
   lockedUntil: Date;
 
-  @Column({ name: 'last_login', type: 'timestamp', nullable: true })
+  @Column({ name: 'last_login', type: 'datetime', nullable: true })
   lastLogin: Date;
 
   @CreateDateColumn({ name: 'created_at' })
@@ -79,4 +81,12 @@ export class User {
 
   @OneToMany(() => PasswordHistory, (history) => history.user)
   passwordHistory: PasswordHistory[];
+
+  // Auto-generate UUID before insert
+  @BeforeInsert()
+  generateId() {
+    if (!this.id) {
+      this.id = generateUuid();
+    }
+  }
 }

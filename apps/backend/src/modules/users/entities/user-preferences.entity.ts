@@ -1,17 +1,19 @@
 import {
   Entity,
-  PrimaryGeneratedColumn,
+  PrimaryColumn,
   Column,
   CreateDateColumn,
   UpdateDateColumn,
+  BeforeInsert,
 } from 'typeorm';
+import { generateUuid } from '../../../shared/utils/uuid.util';
 
 @Entity('user_preferences')
 export class UserPreferences {
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryColumn({ type: 'varchar', length: 36 })
   id: string;
 
-  @Column({ name: 'user_id', type: 'uuid' })
+  @Column({ name: 'user_id', type: 'varchar', length: 36 })
   userId: string;
 
   @Column({ name: 'tenant_id', type: 'varchar', length: 255 })
@@ -29,7 +31,7 @@ export class UserPreferences {
   @Column({ name: 'marketing_emails', type: 'boolean', default: false })
   marketingEmails: boolean;
 
-  @Column({ name: 'dashboard_layout', type: 'jsonb', default: '{}' })
+  @Column({ name: 'dashboard_layout', type: 'simple-json', default: '{}' })
   dashboardLayout: Record<string, any>;
 
   @Column({ name: 'sidebar_collapsed', type: 'boolean', default: false })
@@ -55,4 +57,12 @@ export class UserPreferences {
 
   @UpdateDateColumn({ name: 'updated_at' })
   updatedAt: Date;
+
+  // Auto-generate UUID before insert
+  @BeforeInsert()
+  generateId() {
+    if (!this.id) {
+      this.id = generateUuid();
+    }
+  }
 }
