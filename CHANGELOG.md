@@ -16,6 +16,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Normalized TypeORM metadata registration by explicitly declaring the shared entity classes used by the products, users, auth, and settings domains.
 - Verified the backend live boot and products route smoke test through the configured API server, confirming the application now responds on `http://localhost:1457/api/v1` and returns an empty products collection response when the database contains no seeded products.
 
+### Fixed
+- Corrected frontend API endpoint paths in `products-page.tsx` to include the `/api/v1` prefix for all product operations (fetch, create, update, delete).
+
 ## [0.3.0] - 2026-09-08
 
 ### Added

@@ -70,7 +70,7 @@ export default function ProductsPage() {
 
   const fetchProducts = async () => {
     try {
-      const res = await fetch(`${API_BASE}/api/products`);
+      const res = await fetch(`${API_BASE}/api/v1/products`);
       if (!res.ok) {
         throw new Error(`HTTP ${res.status}`);
       }
@@ -108,8 +108,8 @@ export default function ProductsPage() {
     e.preventDefault();
     try {
       const url = editing
-        ? `${API_BASE}/api/products/${editing.id}`
-        : `${API_BASE}/api/products`;
+        ? `${API_BASE}/api/v1/products/${editing.id}`
+        : `${API_BASE}/api/v1/products`;
       const method = editing ? "PATCH" : "POST";
 
       const res = await fetch(url, {
@@ -140,7 +140,7 @@ export default function ProductsPage() {
   const handleDelete = async () => {
     if (!deleteId) return;
     try {
-      const res = await fetch(`${API_BASE}/api/products/${deleteId}`, {
+      const res = await fetch(`${API_BASE}/api/v1/products/${deleteId}`, {
         method: "DELETE",
       });
       if (!res.ok) throw new Error("Failed to delete product");
