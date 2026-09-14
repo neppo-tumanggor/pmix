@@ -18,6 +18,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - Corrected frontend API endpoint paths in `products-page.tsx` to include the `/api/v1` prefix for all product operations (fetch, create, update, delete).
+- Fixed frontend environment configuration by updating `apps/frontend/.env.local` to use `NEXT_PUBLIC_API_URL=http://localhost:1457` instead of the incorrect `http://localhost:3000/api/v1`.
+- Resolved "Failed to fetch products" TypeError by ensuring the frontend correctly reads the API base URL from environment variables.
 
 ## [0.3.0] - 2026-09-08
 
