@@ -26,7 +26,7 @@ See README.md section "PostgreSQL Setup (Default)" for detailed instructions.
 ### Database: PostgreSQL
 - **Host**: localhost
 - **Port**: 5432
-- **Database**: mixer_dev
+- **Database**: pmix_dev
 - **Username**: postgres
 - **Password**: root (configured in .env)
 - **Status**: ✅ Running and tested
@@ -49,7 +49,7 @@ See README.md section "PostgreSQL Setup (Default)" for detailed instructions.
    - User: postgres
 
 2. **Database Creation**
-   - Database: mixer_dev ✅
+   - Database: pmix_dev ✅
    - Owner: postgres ✅
    - Schema: public ✅
 
@@ -143,7 +143,7 @@ curl http://localhost:1457/health
 
 ### Verify Tables
 ```bash
-psql -U postgres -d mixer_dev -c "\dt"
+psql -U postgres -d pmix_dev -c "\dt"
 ```
 
 ### Test API Endpoints
@@ -221,10 +221,10 @@ pnpm db:rollback
 ### Database Backup
 ```bash
 # Backup
-pg_dump -U postgres -d mixer_dev > backup.sql
+pg_dump -U postgres -d pmix_dev > backup.sql
 
 # Restore
-psql -U postgres -d mixer_dev < backup.sql
+psql -U postgres -d pmix_dev < backup.sql
 ```
 
 ---
@@ -239,7 +239,7 @@ DB_HOST=localhost
 DB_PORT=5432
 DB_USERNAME=postgres
 DB_PASSWORD=root
-DB_DATABASE=mixer_dev
+DB_DATABASE=pmix_dev
 DB_SSL=false
 
 # JWT

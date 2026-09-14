@@ -1,4 +1,4 @@
-# Mixer Marketing Automation Platform - Roadmap
+# pmix Marketing Automation Platform - Roadmap
 
 ## ?? Product Roadmap
 

@@ -19,12 +19,13 @@
     "lib": ["ES2023"],
     "types": ["node"],
     "baseUrl": ".",
+    "ignoreDeprecations": "6.0",
     "paths": {
-      "@mixer/backend/*": ["apps/backend/src/*"],
-      "@mixer/frontend/*": ["apps/frontend/src/*"],
-      "@mixer/shared-types": ["packages/shared-types/src"],
-      "@mixer/shared-ui": ["packages/shared-ui/src"],
-      "@mixer/shared-utils": ["packages/shared-utils/src"]
+      "@pmix/backend/*": ["apps/backend/src/*"],
+      "@pmix/frontend/*": ["apps/frontend/src/*"],
+      "@pmix/shared-types": ["packages/shared-types/src"],
+      "@pmix/shared-ui": ["packages/shared-ui/src"],
+      "@pmix/shared-utils": ["packages/shared-utils/src"]
     }
   }
 }

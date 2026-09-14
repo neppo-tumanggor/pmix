@@ -1,6 +1,6 @@
 # Users Module (v0.3.0)
 
-Module untuk manajemen profil pengguna, preferensi, dan metadata dalam Mixer Marketing Automation Platform.
+Module untuk manajemen profil pengguna, preferensi, dan metadata dalam pmix Marketing Automation Platform.
 
 ## ?? Features
 
@@ -18,24 +18,24 @@ Module untuk manajemen profil pengguna, preferensi, dan metadata dalam Mixer Mar
 ```
 modules/users/
 +-- controllers/           # REST API endpoints
-¦   +-- users.controller.ts
+ï¿½   +-- users.controller.ts
 +-- dto/                   # Data Transfer Objects
-¦   +-- update-profile.dto.ts
+ï¿½   +-- update-profile.dto.ts
 +-- entities/              # TypeORM entities
-¦   +-- user-preferences.entity.ts
-¦   +-- user-metadata.entity.ts
+ï¿½   +-- user-preferences.entity.ts
+ï¿½   +-- user-metadata.entity.ts
 +-- interfaces/            # Repository interfaces
-¦   +-- user.repository.interface.ts
-¦   +-- user-preferences.repository.interface.ts
-¦   +-- user-metadata.repository.interface.ts
+ï¿½   +-- user.repository.interface.ts
+ï¿½   +-- user-preferences.repository.interface.ts
+ï¿½   +-- user-metadata.repository.interface.ts
 +-- repositories/          # Repository implementations
-¦   +-- user.repository.ts
-¦   +-- user-preferences.repository.ts
-¦   +-- user-metadata.repository.ts
+ï¿½   +-- user.repository.ts
+ï¿½   +-- user-preferences.repository.ts
+ï¿½   +-- user-metadata.repository.ts
 +-- services/              # Business logic
-¦   +-- users.service.ts
-¦   +-- user-preferences.service.ts
-¦   +-- user-metadata.service.ts
+ï¿½   +-- users.service.ts
+ï¿½   +-- user-preferences.service.ts
+ï¿½   +-- user-metadata.service.ts
 +-- users.module.ts        # Module definition
 ```
 
@@ -151,4 +151,4 @@ POST /users/me/metadata
 
 ## ?? License
 
-Proprietary - Mixer Marketing Automation Platform
+Proprietary - pmix Marketing Automation Platform

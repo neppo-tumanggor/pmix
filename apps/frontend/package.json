@@ -1,5 +1,5 @@
 {
-  "name": "@mixer/frontend",
+  "name": "@pmix/frontend",
   "version": "1.0.0",
   "private": true,
   "description": "Next.js Frontend Application",
@@ -14,7 +14,7 @@
     "clean": "rm -rf .next .turbo"
   },
   "dependencies": {
-    "@mixer/shared-types": "workspace:*",
+    "@pmix/shared-types": "workspace:*",
     "@radix-ui/react-alert-dialog": "^1.1.23",
     "@radix-ui/react-dialog": "^1.1.23",
     "@radix-ui/react-icons": "^1.3.2",

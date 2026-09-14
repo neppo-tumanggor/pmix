@@ -49,7 +49,7 @@ import { AUTH_CONFIG } from './constants/auth.config';
           },
         },
         defaults: {
-          from: configService.get('SMTP_FROM') || 'noreply@mixer.com',
+          from: configService.get('SMTP_FROM') || 'noreply@pmix.com',
         },
       }),
       inject: [ConfigService],

@@ -160,7 +160,7 @@ export class SettingsService {
           });
 
           // Log the update
-          await this.auditLogRepository.create(manager, {
+          await this.auditLogRepository.createInTransaction(manager, {
             tenantId,
             action: AuditAction.UPDATE,
             resourceType: 'setting',
@@ -186,7 +186,7 @@ export class SettingsService {
           });
 
           // Log the creation
-          await this.auditLogRepository.create(manager, {
+          await this.auditLogRepository.createInTransaction(manager, {
             tenantId,
             action: AuditAction.CREATE,
             resourceType: 'setting',
@@ -201,7 +201,7 @@ export class SettingsService {
 
       // Invalidate cache
       const cacheKey = this.cacheService.buildKey(tenantId, category);
-      await this.cacheService.delete(cacheKey);
+      await this.cacheService.invalidate(cacheKey);
     });
   }
 
@@ -228,7 +228,7 @@ export class SettingsService {
     await this.settingsRepository.softDelete(setting.id);
 
     // Log the deletion
-    await this.auditLogRepository.create(undefined, {
+    await this.auditLogRepository.create({
       tenantId,
       action: AuditAction.DELETE,
       resourceType: 'setting',
@@ -241,13 +241,13 @@ export class SettingsService {
 
     // Invalidate cache
     const cacheKey = this.cacheService.buildKey(tenantId, category);
-    await this.cacheService.delete(cacheKey);
+    await this.cacheService.invalidate(cacheKey);
   }
 
   private getDefaultSettings(): Record<string, Record<string, any>> {
     return {
       [SettingCategory.GENERAL]: {
-        app_name: 'Mixer',
+        app_name: 'pmix',
         timezone: 'UTC',
         language: 'en',
       },
@@ -257,8 +257,8 @@ export class SettingsService {
         smtp_secure: false,
         smtp_user: '',
         smtp_password: '',
-        from_email: 'noreply@mixer.com',
-        from_name: 'Mixer',
+        from_email: 'noreply@pmix.com',
+        from_name: 'pmix',
       },
       [SettingCategory.SECURITY]: {
         password_min_length: 8,

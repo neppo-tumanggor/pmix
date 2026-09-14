@@ -31,16 +31,16 @@ Pastikan PostgreSQL sudah terinstall dan running:
 
 1. **Buat database** menggunakan pgAdmin atau command line:
    ```sql
-   CREATE DATABASE mixer_dev;
+   CREATE DATABASE pmix_dev;
    ```
 
 2. **Verify koneksi** di `apps/backend/.env`:
    ```
    DB_HOST=localhost
    DB_PORT=5432
-   DB_USERNAME=mixer
-   DB_PASSWORD=mixer123
-   DB_DATABASE=mixer_dev
+   DB_USERNAME=pmix
+   DB_PASSWORD=pmix123
+   DB_DATABASE=pmix_dev
    ```
 
 ## Langkah 4: Run Database Migrations
@@ -85,7 +85,7 @@ Buka browser ke http://localhost:4080
 ## 📚 Project Structure Overview
 
 ```
-mixer/
+pmix/
 ├── apps/
 │   ├── backend/           # NestJS API Server
 │   └── frontend/          # Next.js Web App
@@ -162,13 +162,13 @@ pnpm --filter frontend run test:watch
 ### PostgreSQL
 - Host: localhost
 - Port: 5432
-- User: mixer
-- Password: mixer123
-- Database: mixer_dev
+- User: pmix
+- Password: pmix123
+- Database: pmix_dev
 
 ### pgAdmin (Database Management UI)
 - URL: http://localhost:5050
-- Email: admin@mixer.com
+- Email: admin@pmix.com
 - Password: admin123
 
 ## 🐛 Troubleshooting

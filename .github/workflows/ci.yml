@@ -44,9 +44,9 @@ jobs:
       postgres:
         image: postgres:16-alpine
         env:
-          POSTGRES_USER: mixer
-          POSTGRES_PASSWORD: mixer123
-          POSTGRES_DB: mixer_test
+          POSTGRES_USER: pmix
+          POSTGRES_PASSWORD: pmix123
+          POSTGRES_DB: pmix_test
         options: >-
           --health-cmd pg_isready
           --health-interval 10s

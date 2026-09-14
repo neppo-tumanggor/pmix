@@ -12,7 +12,7 @@ type Settings = {
 };
 
 const defaultSettings: Settings = {
-  storeName: "Mixer Store",
+  storeName: "pmix Store",
   email: "admin@example.com",
   currency: "IDR",
   notifyEmail: true,
@@ -24,7 +24,7 @@ export default function SettingsPage() {
   const [saved, setSaved] = useState(false);
 
   useEffect(() => {
-    const stored = localStorage.getItem("mixer-settings");
+    const stored = localStorage.getItem("pmix-settings");
     if (stored) {
       try {
         setSettings(JSON.parse(stored));

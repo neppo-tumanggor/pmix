@@ -2,7 +2,7 @@ import { SettingCategory } from './settings-categories.enum';
 
 export const SETTINGS_DEFAULTS: Record<SettingCategory, Record<string, any>> = {
   [SettingCategory.GENERAL]: {
-    app_name: 'Mixer',
+    app_name: 'pmix',
     timezone: 'UTC',
     language: 'en',
   },
@@ -12,8 +12,8 @@ export const SETTINGS_DEFAULTS: Record<SettingCategory, Record<string, any>> = {
     smtp_secure: false,
     smtp_user: '',
     smtp_password: '',
-    from_email: 'noreply@mixer.com',
-    from_name: 'Mixer',
+    from_email: 'noreply@pmix.com',
+    from_name: 'pmix',
   },
   [SettingCategory.SMS]: {
     provider: 'twilio',

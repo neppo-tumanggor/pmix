@@ -8,7 +8,7 @@ dotenv.config();
 
 // Set defaults if not set
 process.env.DB_TYPE = process.env.DB_TYPE || 'sqljs'; // Default to sqljs
-process.env.DB_DATABASE = process.env.DB_DATABASE || './data/mixer_dev.sqlite';
+process.env.DB_DATABASE = process.env.DB_DATABASE || './data/pmix_dev.sqlite';
 process.env.DB_LOGGING = process.env.DB_LOGGING || 'false';
 
 const dbType = process.env.DB_TYPE;
@@ -34,7 +34,7 @@ const AppDataSource = dbType === 'postgres'
   ? new DataSource({
       type: 'postgres',
       host: process.env.DB_HOST,
-      port: parseInt(process.env.DB_PORT, 10),
+      port: parseInt(process.env.DB_PORT || '5432', 10),
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_DATABASE,
@@ -45,7 +45,7 @@ const AppDataSource = dbType === 'postgres'
     })
   : new DataSource({
       type: 'sqljs',
-      database: loadSqliteDatabase(process.env.DB_DATABASE || './data/mixer_dev.sqlite'),
+      database: loadSqliteDatabase(process.env.DB_DATABASE || './data/pmix_dev.sqlite'),
       entities: ['./dist/modules/**/*.entity.js'],
       migrations: ['./dist/migrations/*.js'],
       synchronize: false,

@@ -24,7 +24,7 @@ export default function Sidebar() {
   return (
     <aside className="w-64 h-screen bg-sidebar border-r border-border flex flex-col fixed left-0 top-0">
       <div className="h-16 flex items-center px-6 border-b border-border">
-        <h1 className="text-lg font-semibold text-foreground">Mixer</h1>
+        <h1 className="text-lg font-semibold text-foreground">pmix</h1>
       </div>
 
       <nav className="flex-1 px-3 py-4 space-y-1 overflow-y-auto sidebar-scroll">

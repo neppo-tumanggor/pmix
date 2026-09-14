@@ -1,4 +1,4 @@
-# Mixer - Enterprise Marketing Automation Platform
+# pmix - Enterprise Marketing Automation Platform
 
 Enterprise-grade monorepo untuk Marketing Automation Platform menggunakan NestJS (backend) dan Next.js (frontend).
 
@@ -6,7 +6,7 @@ Enterprise-grade monorepo untuk Marketing Automation Platform menggunakan NestJS
 
 **Application is READY and RUNNING with SQLite!**
 
-- ✅ **Database**: SQLite (default) - `./data/mixer_dev.sqlite`
+- ✅ **Database**: SQLite (default) - `./data/pmix_dev.sqlite`
 - ✅ **Backend**: Running on http://localhost:1457
 - ✅ **Frontend**: Running on http://localhost:1458
 - ✅ **Health Check**: Passing - http://localhost:1457/health
@@ -27,8 +27,8 @@ Enterprise-grade monorepo untuk Marketing Automation Platform menggunakan NestJS
 
 ```bash
 # 1. Clone repository
-git clone <repository-url> mixer
-cd mixer
+git clone <repository-url> pmix
+cd pmix
 
 # 2. Install dependencies
 pnpm install
@@ -44,7 +44,7 @@ pnpm --filter backend run start:dev  # Backend: http://localhost:1457
 pnpm --filter frontend run dev        # Frontend: http://localhost:1458
 ```
 
-**That's it!** Database file will be created at `./data/mixer_dev.sqlite`
+**That's it!** Database file will be created at `./data/pmix_dev.sqlite`
 
 ---
 
@@ -57,14 +57,14 @@ Untuk production deployments:
 # Download from: https://www.postgresql.org/download/windows/
 
 # 2. Create database
-psql -U postgres -c "CREATE DATABASE mixer_dev;"
+psql -U postgres -c "CREATE DATABASE pmix_dev;"
 
 # 3. Configure .env
 # Change DB_TYPE=sqljs to DB_TYPE=postgres
 # Update DB_USERNAME and DB_PASSWORD
 
 # 4. Grant privileges
-psql -U postgres -d mixer_dev -c "GRANT ALL ON SCHEMA public TO postgres;"
+psql -U postgres -d pmix_dev -c "GRANT ALL ON SCHEMA public TO postgres;"
 
 # 5. Run migrations
 pnpm db:migrate
@@ -89,7 +89,7 @@ See [PostgreSQL Setup](#postgresql-setup-optional) section below for detailed in
 ## 🎯 Running the Application
 
 ### Current Status
-- ✅ **Database**: SQLite (default) - `./data/mixer_dev.sqlite`
+- ✅ **Database**: SQLite (default) - `./data/pmix_dev.sqlite`
 - ✅ **Backend**: Running on http://localhost:1457
 - ✅ **Frontend**: Running on http://localhost:1458
 - ✅ **Health Check**: http://localhost:1457/health
@@ -147,14 +147,14 @@ pnpm --filter frontend run dev
 DB_TYPE=sqljs
 
 # SQLite Configuration (default)
-DB_DATABASE=./data/mixer_dev.sqlite
+DB_DATABASE=./data/pmix_dev.sqlite
 
 # PostgreSQL Configuration (jika DB_TYPE=postgres)
 DB_HOST=localhost
 DB_PORT=5432
 DB_USERNAME=postgres
 DB_PASSWORD=root
-# DB_DATABASE=mixer_dev
+# DB_DATABASE=pmix_dev
 DB_SSL=false
 ```
 
@@ -162,7 +162,7 @@ DB_SSL=false
 ```env
 NODE_ENV=development          # Environment: development/production
 PORT=1457                     # Backend server port
-APP_NAME=Mixer                 # Application name
+APP_NAME=pmix                 # Application name
 APP_VERSION=1.0.0
 ```
 
@@ -177,7 +177,7 @@ JWT_REFRESH_EXPIRY=30d        # Refresh token expiry
 #### Frontend
 ```env
 NEXT_PUBLIC_API_URL=http://localhost:1457/api/v1  # Backend API URL
-NEXT_PUBLIC_APP_NAME=Mixer                         # App name
+NEXT_PUBLIC_APP_NAME=pmix                         # App name
 ```
 
 #### CORS
@@ -198,7 +198,7 @@ cp .env.example .env
 ## 📁 Project Structure
 
 ```
-mixer/
+pmix/
 ├── apps/
 │   ├── backend/           # NestJS API
 │   │   ├── src/
@@ -293,13 +293,13 @@ pnpm --filter frontend run test:e2e
 Default configuration in `.env`:
 ```env
 DB_TYPE=sqljs
-DB_DATABASE=./data/mixer_dev.sqlite
+DB_DATABASE=./data/pmix_dev.sqlite
 ```
 
 #### How It Works
 
 1. **Automatic Database Creation**: SQLite database file is created automatically when you run migrations
-2. **File Location**: `./data/mixer_dev.sqlite` (in project root)
+2. **File Location**: `./data/pmix_dev.sqlite` (in project root)
 3. **No Server Required**: SQLite is serverless - just a file
 4. **Zero Maintenance**: No database server to manage
 
@@ -342,7 +342,7 @@ psql --version
 
 ```sql
 -- Create database
-CREATE DATABASE mixer_dev;
+CREATE DATABASE pmix_dev;
 
 -- Verify database created
 \l
@@ -358,7 +358,7 @@ DB_HOST=localhost
 DB_PORT=5432
 DB_USERNAME=postgres
 DB_PASSWORD=your_password_here
-DB_DATABASE=mixer_dev
+DB_DATABASE=pmix_dev
 DB_SSL=false
 ```
 
@@ -369,10 +369,10 @@ DB_SSL=false
 psql -U postgres
 
 # Grant privileges on database
-GRANT ALL PRIVILEGES ON DATABASE mixer_dev TO postgres;
+GRANT ALL PRIVILEGES ON DATABASE pmix_dev TO postgres;
 
-# Connect to mixer_dev database
-\c mixer_dev
+# Connect to pmix_dev database
+\c pmix_dev
 
 # Grant schema privileges
 GRANT ALL ON SCHEMA public TO postgres;
@@ -389,12 +389,12 @@ ALTER ROLE postgres SET search_path = public;
 **Quick Command (Windows PowerShell):**
 ```powershell
 $env:PGPASSWORD="your_password_here"
-psql -U postgres -c "CREATE DATABASE mixer_dev;"
-psql -U postgres -d mixer_dev -c "GRANT ALL PRIVILEGES ON DATABASE mixer_dev TO postgres;"
-psql -U postgres -d mixer_dev -c "GRANT ALL ON SCHEMA public TO postgres;"
-psql -U postgres -d mixer_dev -c "GRANT CREATE ON SCHEMA public TO PUBLIC;"
-psql -U postgres -d mixer_dev -c "GRANT USAGE ON SCHEMA public TO PUBLIC;"
-psql -U postgres -d mixer_dev -c "ALTER ROLE postgres SET search_path = public;"
+psql -U postgres -c "CREATE DATABASE pmix_dev;"
+psql -U postgres -d pmix_dev -c "GRANT ALL PRIVILEGES ON DATABASE pmix_dev TO postgres;"
+psql -U postgres -d pmix_dev -c "GRANT ALL ON SCHEMA public TO postgres;"
+psql -U postgres -d pmix_dev -c "GRANT CREATE ON SCHEMA public TO PUBLIC;"
+psql -U postgres -d pmix_dev -c "GRANT USAGE ON SCHEMA public TO PUBLIC;"
+psql -U postgres -d pmix_dev -c "ALTER ROLE postgres SET search_path = public;"
 ```
 
 #### 5. Run Database Migrations
@@ -430,28 +430,28 @@ curl http://localhost:8080/health
 2. Check `pg_hba.conf` authentication method (should be `scram-sha-256` or `md5`)
 3. Restart PostgreSQL service after changes
 
-#### Error: "database 'mixer_dev' does not exist"
+#### Error: "database 'pmix_dev' does not exist"
 
 **Solution:**
 ```bash
-psql -U postgres -c "CREATE DATABASE mixer_dev;"
+psql -U postgres -c "CREATE DATABASE pmix_dev;"
 ```
 
 #### Error: "permission denied for schema public"
 
 **Solution:**
 ```bash
-psql -U postgres -d mixer_dev -c "GRANT ALL ON SCHEMA public TO postgres;"
-psql -U postgres -d mixer_dev -c "GRANT CREATE ON SCHEMA public TO PUBLIC;"
-psql -U postgres -d mixer_dev -c "GRANT USAGE ON SCHEMA public TO PUBLIC;"
-psql -U postgres -d mixer_dev -c "ALTER ROLE postgres SET search_path = public;"
+psql -U postgres -d pmix_dev -c "GRANT ALL ON SCHEMA public TO postgres;"
+psql -U postgres -d pmix_dev -c "GRANT CREATE ON SCHEMA public TO PUBLIC;"
+psql -U postgres -d pmix_dev -c "GRANT USAGE ON SCHEMA public TO PUBLIC;"
+psql -U postgres -d pmix_dev -c "ALTER ROLE postgres SET search_path = public;"
 ```
 
 #### Error: "no schema has been selected to create in"
 
 **Solution:**
 ```bash
-psql -U postgres -d mixer_dev -c "ALTER ROLE postgres SET search_path = public;"
+psql -U postgres -d pmix_dev -c "ALTER ROLE postgres SET search_path = public;"
 ```
 
 #### Error: "port 5432 already in use"
@@ -479,27 +479,27 @@ pnpm db:generate
 
 #### Database File Management (SQLite)
 
-**Location**: `./data/mixer_dev.sqlite`
+**Location**: `./data/pmix_dev.sqlite`
 
 **Backup SQLite Database:**
 ```bash
 # Copy database file
-Copy-Item ./data/mixer_dev.sqlite ./data/mixer_dev.backup.sqlite
+Copy-Item ./data/pmix_dev.sqlite ./data/pmix_dev.backup.sqlite
 
 # Or using PowerShell
-cp ./data/mixer_dev.sqlite ./data/mixer_dev.backup.sqlite
+cp ./data/pmix_dev.sqlite ./data/pmix_dev.backup.sqlite
 ```
 
 **Restore SQLite Database:**
 ```bash
 # Restore from backup
-Copy-Item ./data/mixer_dev.backup.sqlite ./data/mixer_dev.sqlite
+Copy-Item ./data/pmix_dev.backup.sqlite ./data/pmix_dev.sqlite
 ```
 
 **View SQLite Database:**
 ```bash
 # Using sqlite3 CLI (if installed)
-sqlite3 ./data/mixer_dev.sqlite
+sqlite3 ./data/pmix_dev.sqlite
 
 # Or use DB Browser for SQLite (GUI)
 # Download from: https://sqlitebrowser.org/
@@ -508,7 +508,7 @@ sqlite3 ./data/mixer_dev.sqlite
 **Database File Size:**
 ```bash
 # Check database file size
-Get-ChildItem ./data/mixer_dev.sqlite | Select-Object Length
+Get-ChildItem ./data/pmix_dev.sqlite | Select-Object Length
 
 # Typical size: < 1MB for development
 ```
@@ -640,7 +640,7 @@ This project is private and confidential.
 1. **SQLite is DEFAULT** - No setup needed for development
 2. **PostgreSQL is OPTIONAL** - For production use
 3. **Easy Switching** - Just change `DB_TYPE` in `.env`
-4. **Database File** - `./data/mixer_dev.sqlite`
+4. **Database File** - `./data/pmix_dev.sqlite`
 5. **No PostgreSQL Installation Required** - For development!
 
 ### 🔧 Troubleshooting
@@ -672,7 +672,7 @@ mkdir -p ./data
 
 ## 👥 Team
 
-Mixer Development Team
+pmix Development Team
 
 ---
 

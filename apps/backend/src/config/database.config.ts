@@ -17,17 +17,17 @@ export function getDatabaseConfig(configService: ConfigService): TypeOrmModuleOp
       type: 'postgres',
       host: configService.get('DB_HOST', 'localhost'),
       port: configService.get('DB_PORT', 5432),
-      username: configService.get('DB_USERNAME', 'mixer'),
-      password: configService.get('DB_PASSWORD', 'mixer123'),
-      database: configService.get('DB_DATABASE', 'mixer_dev'),
+      username: configService.get('DB_USERNAME', 'pmix'),
+      password: configService.get('DB_PASSWORD', 'pmix123'),
+      database: configService.get('DB_DATABASE', 'pmix_dev'),
       ssl: configService.get('DB_SSL', false) ? { rejectUnauthorized: false } : false,
-    };
+    } as any as TypeOrmModuleOptions;
   }
 
   // SQLite (default)
   return {
     ...baseConfig,
-    type: 'sqlite',
-    database: configService.get('DB_DATABASE', './data/mixer_dev.sqlite'),
-  };
+    type: 'sqljs',
+    database: configService.get<string>('DB_DATABASE', './data/pmix_dev.sqlite'),
+  } as any as TypeOrmModuleOptions;
 }
