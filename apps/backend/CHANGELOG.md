@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Changed
+- Restored the default application database path to SQLite/SQLJS by aligning the backend environment and runtime configuration around `DB_TYPE=sqljs` and `DB_DATABASE=./data/pmix_dev.sqlite`.
+- Normalized TypeORM metadata registration by explicitly declaring the shared entity classes used by the products, users, auth, and settings domains.
+- Verified the backend live boot and products route smoke test through the configured API server, confirming the application now responds on `http://localhost:1457/api/v1` and returns an empty products collection response when the database contains no seeded products.
+
 ## [0.3.0] - 2026-09-08
 
 ### Added
