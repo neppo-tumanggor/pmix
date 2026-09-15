@@ -8,25 +8,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
-- `tools/scripts/pmix.cjs` â€” Cross-platform CLI for managing the PMIX development lifecycle.
-- Root npm scripts: `pnpm dev`, `pnpm start`, `pnpm stop`, `pnpm restart`, `pnpm status`.
-- `.pmix-processes.json` state tracking for backend/frontend PIDs with stale-state cleanup.
+- `tools/scripts/pmix.cjs` — Cross-platform CLI for managing the PMIX lifecycle.
+- `pmix dev` — Start development environment (backend + frontend with hot reload).
+- `pmix build` — Build backend and frontend for production.
+- `pmix start` — Start production environment (compiled backend + next start).
+- `pmix stop` — Stop current environment.
+- `pmix restart` — Restart current environment (preserves runtime mode).
+- `pmix status` — Show service status and runtime mode.
+- `.pmix-processes.json` state tracking with runtime mode (development/production).
 - Process tree killing on Windows (`taskkill /T`) and Unix (process group `SIGTERM`/`SIGKILL`).
 - Idempotent `stop` and duplicate-start prevention.
 - Graceful shutdown on `SIGINT`/`SIGTERM` with rollback if frontend spawn fails.
+- Root `package.json` `bin` entry for direct `pmix` executable.
 
 ### Changed
-- Updated README quick start to use `pnpm dev` / `pnpm start` instead of long `pnpm --filter ...` commands.
-
-### Changed
-- Restored the default application database path to SQLite/SQLJS by aligning the backend environment and runtime configuration around `DB_TYPE=sqljs` and `DB_DATABASE=./data/pmix_dev.sqlite`.
-- Normalized TypeORM metadata registration by explicitly declaring the shared entity classes used by the products, users, auth, and settings domains.
-- Verified the backend live boot and products route smoke test through the configured API server, confirming the application now responds on `http://localhost:1457/api/v1` and returns an empty products collection response when the database contains no seeded products.
-
-### Fixed
-- Corrected frontend API endpoint paths in `products-page.tsx` to include the `/api/v1` prefix for all product operations (fetch, create, update, delete).
-- Fixed frontend environment configuration by updating `apps/frontend/.env.local` to use `NEXT_PUBLIC_API_URL=http://localhost:1457` instead of the incorrect `http://localhost:3000/api/v1`.
-- Resolved "Failed to fetch products" TypeError by ensuring the frontend correctly reads the API base URL from environment variables.
+- Separated development (`pmix dev`) and production (`pmix start`) runtime semantics.
+- Updated README with clear dev/prod sections and consistent commands.
+- PostgreSQL section now documented as production database configuration, not production runtime.
 
 ## [0.3.0] - 2026-09-08
 
@@ -87,3 +85,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Role-based access control (Admin, Manager, User)
 - Password history tracking
 - Session management
+

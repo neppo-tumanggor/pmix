@@ -2,26 +2,26 @@
 
 Enterprise-grade monorepo untuk Marketing Platform menggunakan NestJS (backend) dan Next.js (frontend).
 
-## 🎯 Current Status
+## ?? Current Status
 
 **Application is READY and RUNNING with SQLite!**
 
-- ✅ **Database**: SQLite (default) - `./data/pmix_dev.sqlite`
-- ✅ **Backend**: Running on http://localhost:1457
-- ✅ **Frontend**: Running on http://localhost:1458
-- ✅ **Health Check**: Passing - http://localhost:1457/health
-- ✅ **All Systems**: Operational
+- ? **Database**: SQLite (default) - `./data/pmix_dev.sqlite`
+- ? **Backend**: Running on http://localhost:1457
+- ? **Frontend**: Running on http://localhost:1458
+- ? **Health Check**: Passing - http://localhost:1457/health
+- ? **All Systems**: Operational
 
 **Quick Access:**
-- 🌐 Frontend: http://localhost:1458
-- 🔗 Backend API: http://localhost:1457
-- 🏥 Health: http://localhost:1457/health
+- ?? Frontend: http://localhost:1458
+- ?? Backend API: http://localhost:1457
+- ?? Health: http://localhost:1457/health
 
 ---
 
-## 🚀 Quick Start
+## ?? Quick Start
 
-### ⚡ Zero-Config Development (SQLite - DEFAULT)
+### ? Zero-Config Development (SQLite - DEFAULT)
 
 **No database installation required!** SQLite works out of the box.
 
@@ -40,24 +40,23 @@ cp .env.example .env
 pnpm db:migrate
 
 # 5. Start development environment
-pnpm dev    # or: pnpm start
-```
-
-
-Other useful commands:
-```bash
-pnpm stop      # Stop development environment
-pnpm restart   # Restart development environment
-pnpm status    # Show running status and PIDs
+pmix dev
 ```
 
 **That's it!** Database file will be created at `./data/pmix_dev.sqlite`
 
+Other useful commands:
+```bash
+pmix status      # Show running status and PIDs
+pmix restart     # Restart development environment
+pmix stop        # Stop development environment
+```
+
 ---
 
-### 🏢 Production with PostgreSQL (Optional)
+### ?? Production Database Configuration (PostgreSQL)
 
-Untuk production deployments:
+For production deployments, configure PostgreSQL as your database:
 
 ```bash
 # 1. Install PostgreSQL (if not installed)
@@ -76,9 +75,8 @@ psql -U postgres -d pmix_dev -c "GRANT ALL ON SCHEMA public TO postgres;"
 # 5. Run migrations
 pnpm db:migrate
 
-# 6. Start servers
-pnpm dev
-
+# 6. Start development environment with PostgreSQL
+pmix dev
 ```
 
 See [PostgreSQL Setup](#postgresql-setup-optional) section below for detailed instructions.
@@ -89,167 +87,143 @@ See [PostgreSQL Setup](#postgresql-setup-optional) section below for detailed in
 - Node.js >= 20.0.0
 - PNPM >= 9.0.0
 - PostgreSQL >= 18.0 (only if using PostgreSQL)
-- **SQLite** - Built-in, no installation needed! ✅
+- **SQLite** - Built-in, no installation needed! ?
 
 ---
 
-## 🎯 Running the Application
+## ??? Development
 
-### Current Status
-- ✅ **Database**: SQLite (default) - `./data/pmix_dev.sqlite`
-- ✅ **Backend**: Running on http://localhost:1457
-- ✅ **Frontend**: Running on http://localhost:1458
-- ✅ **Health Check**: http://localhost:1457/health
+### Start Development Environment
 
-### Access Points
-```
-Frontend:  http://localhost:1458
-Backend:   http://localhost:1457
-API Docs:  http://localhost:1457/api
-Health:    http://localhost:1457/health
-```
-
-### Verify Installation
 ```bash
-# Test backend health
-curl http://localhost:1457/health
-
-# Expected response: {"status": true}
-
-# Test frontend
-# Open browser: http://localhost:1458
+pmix dev
 ```
 
-### Daily Development
+This starts both backend and frontend in development mode with hot reload:
+- **Backend**: http://localhost:1457 (NestJS with ts-node)
+- **Frontend**: http://localhost:1458 (Next.js with Turbopack)
+- **Health**: http://localhost:1457/health
+
+### Development Commands
+
 ```bash
-# 1. Start backend (terminal 1)
-pnpm dev
-
-# 2. Start frontend (terminal 2)
-pnpm dev
-
-# 3. Access application
-# Frontend: http://localhost:1458
-# Backend: http://localhost:1457
-# Health: http://localhost:1457/health
+pmix dev       # Start development environment
+pmix status    # Show running status and PIDs
+pmix restart   # Restart development environment
+pmix stop      # Stop development environment
 ```
 
-### Hot Reload
-- **Backend**: Changes in `apps/backend/src/` trigger automatic restart
-- **Frontend**: Changes in `apps/frontend/src/` trigger automatic reload via Turbopack
+### Daily Development Workflow
+
+```bash
+# Terminal 1: Start development environment
+pmix dev
+
+# Terminal 2: Run tests
+pnpm test
+
+# Make changes to backend or frontend
+# Hot reload will automatically restart the affected service
+```
 
 ---
 
-## ⚙️ Environment Variables
+## ?? Production
 
-### Configuration Files
-- `.env` - Main environment variables (git-ignored)
-- `.env.example` - Template for environment setup
+### Build for Production
 
-### Key Variables
-
-#### Database
-```env
-# Database Type: 'sqljs' (default) atau 'postgres'
-DB_TYPE=sqljs
-
-# SQLite Configuration (default)
-DB_DATABASE=./data/pmix_dev.sqlite
-
-# PostgreSQL Configuration (jika DB_TYPE=postgres)
-DB_HOST=localhost
-DB_PORT=5432
-DB_USERNAME=postgres
-DB_PASSWORD=root
-# DB_DATABASE=pmix_dev
-DB_SSL=false
-```
-
-#### Application
-```env
-NODE_ENV=development          # Environment: development/production
-PORT=1457                     # Backend server port
-APP_NAME=pmix                 # Application name
-APP_VERSION=1.0.0
-```
-
-#### JWT Authentication
-```env
-JWT_SECRET=your-secret-key    # JWT signing secret (min 32 chars)
-JWT_EXPIRY=7d                 # JWT token expiry
-JWT_REFRESH_SECRET=...        # Refresh token secret
-JWT_REFRESH_EXPIRY=30d        # Refresh token expiry
-```
-
-#### Frontend
-```env
-NEXT_PUBLIC_API_URL=http://localhost:1457/api/v1  # Backend API URL
-NEXT_PUBLIC_APP_NAME=pmix                         # App name
-```
-
-#### CORS
-```env
-CORS_ORIGIN=http://localhost:1458  # Allowed frontend origin
-```
-
-### Setup
 ```bash
-# Copy environment template
-cp .env.example .env
-
-# Edit .env with your settings
-# For SQLite (default): No changes needed!
-# For PostgreSQL: Update DB_TYPE and DB credentials
+pmix build
 ```
 
-## 📁 Project Structure
+This builds both backend and frontend for production:
+- **Backend**: Compiles TypeScript to `dist/`
+- **Frontend**: Creates optimized production bundle
+
+### Start Production Environment
+
+```bash
+pmix start
+```
+
+This starts the production runtime:
+- **Backend**: http://localhost:1457 (compiled Node.js)
+- **Frontend**: http://localhost:1458 (Next.js production server)
+- **Health**: http://localhost:1457/health
+
+### Production Commands
+
+```bash
+pmix build     # Build for production
+pmix start     # Start production environment
+pmix status    # Show running status and PIDs
+pmix restart   # Restart production environment
+pmix stop      # Stop production environment
+```
+
+---
+
+## ?? Project Structure
 
 ```
 pmix/
-├── apps/
-│   ├── backend/           # NestJS API
-│   │   ├── src/
-│   │   │   ├── common/    # Shared utilities (guards, interceptors, etc)
-│   │   │   ├── config/    # Configuration files
-│   │   │   ├── modules/   # Feature modules (DDD pattern)
-│   │   │   ├── infrastructure/  # External services
-│   │   │   └── shared/    # Shared backend code
-│   │   ├── test/          # Backend tests
-│   │   ├── migrations/    # Database migrations
-│   │
-│   └── frontend/          # Next.js App
-│       ├── src/
-│       │   ├── app/       # Next.js App Router
-│       │   ├── components/# React components
-│       │   ├── hooks/     # Custom hooks
-│       │   ├── lib/       # Utilities & API client
-│       │   ├── stores/    # State management
-│       │   └── types/     # TypeScript types
-│
-├── packages/
-│   ├── shared-types/      # Shared TypeScript types
-│   ├── shared-ui/         # Shared UI components
-│   └── shared-utils/      # Shared utilities
-│
-├── docs/                  # Documentation
-├── tools/                 # Development tools
-└── .github/               # CI/CD workflows
++-- apps/
+�   +-- backend/           # NestJS API
+�   �   +-- src/
+�   �   �   +-- common/    # Shared utilities (guards, interceptors, etc)
+�   �   �   +-- config/    # Configuration files
+�   �   �   +-- modules/   # Feature modules (DDD pattern)
+�   �   �   +-- infrastructure/  # External services
+�   �   �   +-- shared/    # Shared backend code
+�   �   +-- test/          # Backend tests
+�   �   +-- migrations/    # Database migrations
+�   �
+�   +-- frontend/          # Next.js App
+�       +-- src/
+�       �   +-- app/       # Next.js App Router
+�       �   +-- components/# React components
+�       �   +-- hooks/     # Custom hooks
+�       �   +-- lib/       # Utilities & API client
+�       �   +-- stores/    # State management
+�       �   +-- types/     # TypeScript types
+�
++-- packages/
+�   +-- shared-types/      # Shared TypeScript types
+�   +-- shared-ui/         # Shared UI components
+�   +-- shared-utils/      # Shared utilities
+�
++-- docs/                  # Documentation
++-- tools/                 # Development tools
++-- .github/               # CI/CD workflows
 ```
 
-## 🛠️ Available Scripts
+---
+
+## ?? PMIX CLI Commands
 
 ```bash
-pnpm pmix dev      # Start development environment (backend + frontend)
-pnpm pmix start    # Alias for dev
-pnpm pmix stop     # Stop development environment
-pnpm pmix restart  # Restart development environment
-pnpm pmix status   # Show running status and PIDs
+pmix dev       # Development runtime (backend + frontend with hot reload)
+pmix build     # Production build (backend + frontend)
+pmix start     # Production runtime (compiled backend + next start)
+pmix stop      # Stop current runtime
+pmix restart   # Restart current runtime (preserves mode)
+pmix status    # Show service status and runtime mode
 ```
+
+---
+
+## ?? Package Manager Scripts
+
+These are workspace/package scripts for advanced usage:
 
 ### Root Level
 ```bash
 pnpm build          # Build all apps
-pnpm dev            # Run all apps in development
+pnpm dev            # Start development environment via PMIX CLI
+pnpm start          # Start production environment via PMIX CLI
+pnpm stop           # Stop environment via PMIX CLI
+pnpm restart        # Restart environment via PMIX CLI
+pnpm status         # Show status via PMIX CLI
 pnpm lint           # Lint all packages
 pnpm test           # Run all tests
 pnpm type-check     # Type check all packages
@@ -260,7 +234,8 @@ pnpm db:seed        # Seed database
 
 ### Backend Only
 ```bash
-pnpm dev      # Start dev server
+pnpm --filter backend run start:dev      # Start dev server
+pnpm --filter backend run start:prod     # Start production server
 pnpm --filter backend run test           # Run unit tests
 pnpm --filter backend run test:e2e       # Run e2e tests
 pnpm --filter backend run db:migrate     # Run migrations
@@ -268,13 +243,16 @@ pnpm --filter backend run db:migrate     # Run migrations
 
 ### Frontend Only
 ```bash
-pnpm dev           # Start dev server
+pnpm --filter frontend run dev           # Start dev server
 pnpm --filter frontend run build         # Build for production
+pnpm --filter frontend run start         # Start production server
 pnpm --filter frontend run lint          # Lint code
 pnpm --filter frontend run test          # Run tests
 ```
 
-## 🧪 Testing
+---
+
+## ?? Testing
 
 ### Backend
 ```bash
@@ -297,7 +275,9 @@ pnpm --filter frontend run test
 pnpm --filter frontend run test:e2e
 ```
 
-## 📊 Database
+---
+
+## ?? Database
 
 ### SQLite (Default) - Zero Configuration
 
@@ -320,14 +300,14 @@ DB_DATABASE=./data/pmix_dev.sqlite
 
 #### When to Use SQLite
 
-✅ **Perfect for:**
+? **Perfect for:**
 - Development & testing
 - Single-user applications
 - Prototyping
 - Small to medium projects
 - Quick setup
 
-❌ **Limitations:**
+? **Limitations:**
 - Limited concurrent writes (one writer at a time)
 - No user management/authentication
 - Not ideal for high-traffic production
@@ -418,63 +398,20 @@ psql -U postgres -d pmix_dev -c "ALTER ROLE postgres SET search_path = public;"
 pnpm db:migrate
 ```
 
-#### 6. Verify Database Connection
+#### 6. Start Development Environment
 
 ```bash
-# Start backend server
-pnpm dev
-
-# Test health endpoint
-curl http://localhost:8080/health
-# Expected: {"status": true}
+pmix dev
 ```
 
 #### When to Use PostgreSQL
 
-✅ **Perfect for:**
+? **Perfect for:**
 - Production deployments
 - Multi-user applications
 - High-concurrency systems
 - Complex analytics/reporting
 - Advanced SQL features needed
-
-#### Error: "password authentication failed for user 'postgres'"
-
-**Solution:**
-1. Verify password in `.env` matches PostgreSQL password
-2. Check `pg_hba.conf` authentication method (should be `scram-sha-256` or `md5`)
-3. Restart PostgreSQL service after changes
-
-#### Error: "database 'pmix_dev' does not exist"
-
-**Solution:**
-```bash
-psql -U postgres -c "CREATE DATABASE pmix_dev;"
-```
-
-#### Error: "permission denied for schema public"
-
-**Solution:**
-```bash
-psql -U postgres -d pmix_dev -c "GRANT ALL ON SCHEMA public TO postgres;"
-psql -U postgres -d pmix_dev -c "GRANT CREATE ON SCHEMA public TO PUBLIC;"
-psql -U postgres -d pmix_dev -c "GRANT USAGE ON SCHEMA public TO PUBLIC;"
-psql -U postgres -d pmix_dev -c "ALTER ROLE postgres SET search_path = public;"
-```
-
-#### Error: "no schema has been selected to create in"
-
-**Solution:**
-```bash
-psql -U postgres -d pmix_dev -c "ALTER ROLE postgres SET search_path = public;"
-```
-
-#### Error: "port 5432 already in use"
-
-**Solution:**
-1. Check if another PostgreSQL instance is running
-2. Change port in `postgresql.conf` or stop conflicting service
-3. Update `DB_PORT` in `.env` if using different port
 
 ---
 
@@ -553,27 +490,71 @@ Get-ChildItem ./data/pmix_dev.sqlite | Select-Object Length
 
 ---
 
-## 🔧 Development Tools
+## ?? Environment Variables
 
-### Code Generation (Coming Soon)
-```bash
-pnpm generate:module <name>
-pnpm generate:component <name>
+### Configuration Files
+- `.env` - Main environment variables (git-ignored)
+- `.env.example` - Template for environment setup
+
+### Key Variables
+
+#### Database
+```env
+# Database Type: 'sqljs' (default) atau 'postgres'
+DB_TYPE=sqljs
+
+# SQLite Configuration (default)
+DB_DATABASE=./data/pmix_dev.sqlite
+
+# PostgreSQL Configuration (jika DB_TYPE=postgres)
+DB_HOST=localhost
+DB_PORT=5432
+DB_USERNAME=postgres
+DB_PASSWORD=root
+# DB_DATABASE=pmix_dev
+DB_SSL=false
 ```
 
-### Format Code
-```bash
-pnpm format
+#### Application
+```env
+NODE_ENV=development          # Environment: development/production
+PORT=1457                     # Backend server port
+APP_NAME=pmix                 # Application name
+APP_VERSION=1.0.0
 ```
 
-## 📚 Documentation
+#### JWT Authentication
+```env
+JWT_SECRET=your-secret-key    # JWT signing secret (min 32 chars)
+JWT_EXPIRY=7d                 # JWT token expiry
+JWT_REFRESH_SECRET=...        # Refresh token secret
+JWT_REFRESH_EXPIRY=30d        # Refresh token expiry
+```
 
-- [Architecture](./docs/architecture/system-architecture.md)
-- [Database Setup](./DATABASE_SETUP.md)
-- [API Documentation](./docs/api/)
-- [Development Guides](./docs/guides/)
+#### Frontend
+```env
+NEXT_PUBLIC_API_URL=http://localhost:1457/api/v1  # Backend API URL
+NEXT_PUBLIC_APP_NAME=pmix                         # App name
+```
 
-## 🔌 API Reference
+#### CORS
+```env
+CORS_ORIGIN=http://localhost:1458  # Allowed frontend origin
+```
+
+### Setup
+```bash
+# Copy environment template
+cp .env.example .env
+
+# Edit .env with your settings
+# For SQLite (default): No changes needed!
+# For PostgreSQL: Update DB_TYPE and DB credentials
+```
+
+---
+
+## ?? API Reference
 
 ### Base URL
 ```
@@ -597,7 +578,9 @@ GET    /health                    # Application health status
 - Interactive API docs: http://localhost:1457/api
 - Swagger/OpenAPI spec: Available when backend is running
 
-## 🤝 Contributing
+---
+
+## ?? Contributing
 
 1. Fork the repository
 2. Create feature branch (`git checkout -b feature/amazing-feature`)
@@ -605,43 +588,45 @@ GET    /health                    # Application health status
 4. Push to branch (`git push origin feature/amazing-feature`)
 5. Open Pull Request
 
-## 📝 License
+---
+
+## ?? License
 
 This project is private and confidential.
 
 ---
 
-## 🎯 Implementation Summary
+## ?? Implementation Summary
 
-### ✅ Completed Features
+### ? Completed Features
 
 #### Database Configuration
-- ✅ **SQLite as Default Database** - Zero-configuration development
-- ✅ **PostgreSQL as Optional** - Production-ready alternative
-- ✅ **Auto-create Directory** - `./data/` directory created automatically
-- ✅ **Code Fallback** - Defaults to SQLite even without `.env` file
-- ✅ **Migration Compatibility** - Works with both SQLite and PostgreSQL
-- ✅ **Entity Updates** - All entities use `datetime` for SQLite compatibility
-- ✅ **Driver Installed** - `sql.js` + `@types/sql.js` installed
+- ? **SQLite as Default Database** - Zero-configuration development
+- ? **PostgreSQL as Optional** - Production-ready alternative
+- ? **Auto-create Directory** - `./data/` directory created automatically
+- ? **Code Fallback** - Defaults to SQLite even without `.env` file
+- ? **Migration Compatibility** - Works with both SQLite and PostgreSQL
+- ? **Entity Updates** - All entities use `datetime` for SQLite compatibility
+- ? **Driver Installed** - `sql.js` + `@types/sql.js` installed
 
 #### Port Configuration
-- ✅ **Backend Port**: `8080` → `1457` (avoid conflicts)
-- ✅ **Frontend Port**: `4080` → `1458` (avoid conflicts)
-- ✅ **CORS Updated** - Configured for new frontend port
-- ✅ **Documentation Updated** - All references updated
+- ? **Backend Port**: `8080` ? `1457` (avoid conflicts)
+- ? **Frontend Port**: `4080` ? `1458` (avoid conflicts)
+- ? **CORS Updated** - Configured for new frontend port
+- ? **Documentation Updated** - All references updated
 
 #### Configuration Files
-- ✅ `.env` - SQLite default with new ports
-- ✅ `.env.example` - Template with SQLite default
-- ✅ `.gitignore` - Protects `.env` file
-- ✅ `data-source.ts` - SQLite primary, PostgreSQL fallback
+- ? `.env` - SQLite default with new ports
+- ? `.env.example` - Template with SQLite default
+- ? `.gitignore` - Protects `.env` file
+- ? `data-source.ts` - SQLite primary, PostgreSQL fallback
 
 #### Documentation
-- ✅ `README.md` - Updated with SQLite-first approach
-- ✅ `DATABASE_SETUP.md` - Comprehensive setup guide
-- ✅ `SQLITE_SETUP.md` - Implementation summary
+- ? `README.md` - Updated with SQLite-first approach
+- ? `DATABASE_SETUP.md` - Comprehensive setup guide
+- ? `SQLITE_SETUP.md` - Implementation summary
 
-### 🚀 Quick Reference
+### ?? Quick Reference
 
 | Service | URL |
 |---------|-----|
@@ -650,7 +635,7 @@ This project is private and confidential.
 | **Health Check** | http://localhost:1457/health |
 | **API Docs** | http://localhost:1457/api |
 
-### 💡 Key Points
+### ?? Key Points
 
 1. **SQLite is DEFAULT** - No setup needed for development
 2. **PostgreSQL is OPTIONAL** - For production use
@@ -658,7 +643,7 @@ This project is private and confidential.
 4. **Database File** - `./data/pmix_dev.sqlite`
 5. **No PostgreSQL Installation Required** - For development!
 
-### 🔧 Troubleshooting
+### ?? Troubleshooting
 
 #### SQLite Issues
 
@@ -685,18 +670,10 @@ mkdir -p ./data
 
 ---
 
-## 👥 Team
+## ?? Team
 
 pmix Development Team
 
 ---
 
 For more information, see [docs/](./docs/)
-
-
-
-
-
-
-
-

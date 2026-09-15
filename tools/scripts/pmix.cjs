@@ -26,8 +26,9 @@ function readState() {
   } catch { return null; }
 }
 
-function writeState(backendPid, frontendPid) {
+function writeState(mode, backendPid, frontendPid) {
   const state = {
+    mode,
     backend: { pid: backendPid },
     frontend: { pid: frontendPid },
     startedAt: new Date().toISOString()
@@ -100,7 +101,7 @@ async function startDev() {
     const frontendAlive = existingState.frontend?.pid && isProcessAlive(existingState.frontend.pid);
 
     if (backendAlive || frontendAlive) {
-      logError('PMIX is already running. Use "pnpm pmix stop" first.');
+      logError('PMIX is already running. Use "pmix stop" first.');
       logError(`  Backend PID: ${existingState.backend?.pid || 'unknown'} ${backendAlive ? '(running)' : '(dead)'}`);
       logError(`  Frontend PID: ${existingState.frontend?.pid || 'unknown'} ${frontendAlive ? '(running)' : '(dead)'}`);
       process.exit(1);
@@ -171,13 +172,152 @@ async function startDev() {
     cleanupAndExit(1);
   }
 
-  writeState(backendProcess.pid, frontendProcess.pid);
+  writeState('development', backendProcess.pid, frontendProcess.pid);
 
   log('');
   log('PMIX development environment started!');
   log(`  Backend:  http://localhost:${BACKEND_PORT}`);
   log(`  Frontend: http://localhost:${FRONTEND_PORT}`);
+  log(`  Health:   http://localhost:${BACKEND_PORT}/health`);
   log('');
+}
+
+async function startProd() {
+  log('Starting PMIX production environment...');
+  const existingState = readState();
+
+  if (existingState) {
+    const backendAlive = existingState.backend?.pid && isProcessAlive(existingState.backend.pid);
+    const frontendAlive = existingState.frontend?.pid && isProcessAlive(existingState.frontend.pid);
+
+    if (backendAlive || frontendAlive) {
+      logError('PMIX is already running. Use "pmix stop" first.');
+      logError(`  Backend PID: ${existingState.backend?.pid || 'unknown'} ${backendAlive ? '(running)' : '(dead)'}`);
+      logError(`  Frontend PID: ${existingState.frontend?.pid || 'unknown'} ${frontendAlive ? '(running)' : '(dead)'}`);
+      process.exit(1);
+    }
+    log('Cleaning stale state file...');
+    removeState();
+  }
+  log('Starting backend (production)...');
+  backendProcess = spawn(
+    pnpmCommand,
+    ['--filter', 'backend', 'run', 'start:prod'],
+    {
+      cwd: ROOT_DIR,
+      stdio: 'inherit',
+      detached: process.platform !== 'win32',
+      shell: process.platform === 'win32'
+    }
+  );
+
+  backendProcess.on('error', (error) => {
+    logError(`Failed to start backend: ${error.message}`);
+    cleanupAndExit(1);
+  });
+
+  backendProcess.on('exit', (code, signal) => {
+    if (!shuttingDown && code !== null && code !== 0) {
+      logError(`Backend exited unexpectedly with code ${code}${signal ? ` and signal ${signal}` : ''}`);
+      logError('Check backend logs for details.');
+      cleanupAndExit(1);
+    }
+  });
+  await new Promise(resolve => setTimeout(resolve, 2000));
+  if (!isProcessAlive(backendProcess.pid)) {
+    logError('Backend failed to start. Check for errors above.');
+    cleanupAndExit(1);
+  }
+
+  log('Starting frontend (production)...');
+  frontendProcess = spawn(
+    pnpmCommand,
+    ['--filter', 'frontend', 'run', 'start'],
+    {
+      cwd: ROOT_DIR,
+      stdio: 'inherit',
+      detached: process.platform !== 'win32',
+      shell: process.platform === 'win32'
+    }
+  );
+
+  frontendProcess.on('error', async (error) => {
+    logError(`Failed to start frontend: ${error.message}`);
+    log('Rolling back: stopping backend...');
+    await stopService('Backend', backendProcess, backendProcess?.pid);
+    cleanupAndExit(1);
+  });
+
+  frontendProcess.on('exit', (code, signal) => {
+    if (!shuttingDown && code !== null && code !== 0) {
+      logError(`Frontend exited unexpectedly with code ${code}${signal ? ` and signal ${signal}` : ''}`);
+      logError('Check frontend logs for details.');
+      cleanupAndExit(1);
+    }
+  });
+  await new Promise(resolve => setTimeout(resolve, 2000));
+  if (!isProcessAlive(frontendProcess.pid)) {
+    logError('Frontend failed to start. Check for errors above.');
+    await stopService('Backend', backendProcess, backendProcess?.pid);
+    cleanupAndExit(1);
+  }
+
+  writeState('production', backendProcess.pid, frontendProcess.pid);
+
+  log('');
+  log('PMIX production environment started!');
+  log(`  Backend:  http://localhost:${BACKEND_PORT}`);
+  log(`  Frontend: http://localhost:${FRONTEND_PORT}`);
+  log(`  Health:   http://localhost:${BACKEND_PORT}/health`);
+  log('');
+}
+
+async function build() {
+  log('Building PMIX for production...');
+
+  log('Building backend...');
+  const backendBuild = spawn(
+    pnpmCommand,
+    ['--filter', 'backend', 'run', 'build'],
+    {
+      cwd: ROOT_DIR,
+      stdio: 'inherit',
+      shell: process.platform === 'win32'
+    }
+  );
+
+  const backendCode = await new Promise((resolve) => {
+    backendBuild.on('close', resolve);
+    backendBuild.on('error', () => resolve(1));
+  });
+
+  if (backendCode !== 0) {
+    logError('Backend build failed.');
+    process.exit(1);
+  }
+
+  log('Building frontend...');
+  const frontendBuild = spawn(
+    pnpmCommand,
+    ['--filter', 'frontend', 'run', 'build'],
+    {
+      cwd: ROOT_DIR,
+      stdio: 'inherit',
+      shell: process.platform === 'win32'
+    }
+  );
+
+  const frontendCode = await new Promise((resolve) => {
+    frontendBuild.on('close', resolve);
+    frontendBuild.on('error', () => resolve(1));
+  });
+
+  if (frontendCode !== 0) {
+    logError('Frontend build failed.');
+    process.exit(1);
+  }
+
+  log('Build completed successfully!');
 }
 
 async function stop() {
@@ -207,9 +347,17 @@ async function stop() {
 
 async function restart() {
   log('Restarting PMIX...');
+  const state = readState();
+  const mode = state?.mode || 'development';
+
   await stop();
   await new Promise(resolve => setTimeout(resolve, 1000));
-  await startDev();
+
+  if (mode === 'production') {
+    await startProd();
+  } else {
+    await startDev();
+  }
 }
 
 function status() {
@@ -226,6 +374,8 @@ function status() {
   const backendAlive = state.backend?.pid ? isProcessAlive(state.backend.pid) : false;
   const frontendAlive = state.frontend?.pid ? isProcessAlive(state.frontend.pid) : false;
 
+  log(`  Mode: ${state.mode || 'unknown'}`);
+  log('');
   log('  Backend:');
   log(`    PID: ${state.backend?.pid || 'unknown'}`);
   log(`    Status: ${backendAlive ? 'Running' : 'Stopped/Dead'}`);
@@ -241,24 +391,28 @@ function status() {
 
   if (!backendAlive || !frontendAlive) {
     log('  Warning: Some processes are not running. State file may be stale.');
-    log('  Run "pnpm pmix stop" to clean up.');
+    log('  Run "pmix stop" to clean up.');
   }
 }
 
 function usage() {
   console.log('');
-  console.log('Usage: pnpm pmix [command]');
+  console.log('Usage: pmix [command]');
   console.log('');
   console.log('Commands:');
-  console.log('  dev, start    Start development environment (backend + frontend)');
-  console.log('  stop          Stop development environment');
-  console.log('  restart       Restart development environment');
-  console.log('  status        Show status of PMIX processes');
+  console.log('  dev       Start development environment (backend + frontend)');
+  console.log('  build     Build backend and frontend for production');
+  console.log('  start     Start production environment (requires build first)');
+  console.log('  stop      Stop current environment');
+  console.log('  restart   Restart current environment (preserves mode)');
+  console.log('  status    Show status of PMIX processes');
   console.log('');
   console.log('Examples:');
-  console.log('  pnpm pmix dev');
-  console.log('  pnpm pmix stop');
-  console.log('  pnpm pmix status');
+  console.log('  pmix dev');
+  console.log('  pmix build');
+  console.log('  pmix start');
+  console.log('  pmix stop');
+  console.log('  pmix status');
   console.log('');
 }
 
@@ -310,8 +464,13 @@ async function main() {
   const command = (process.argv[2] || 'dev').toLowerCase();
   switch (command) {
     case 'dev':
-    case 'start':
       await startDev();
+      break;
+    case 'build':
+      await build();
+      break;
+    case 'start':
+      await startProd();
       break;
     case 'stop':
       await stop();
