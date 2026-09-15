@@ -67,7 +67,7 @@ export default function SettingsPage() {
               <input
                 type="text"
                 value={settings.storeName}
-                onChange={(e) => update({ storeName: e.target.value })}
+                onChange={(e) => update({ storeName: e.currentTarget.value })}
                 className="w-full border border-border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gray-400"
               />
             </div>
@@ -79,7 +79,7 @@ export default function SettingsPage() {
               <input
                 type="email"
                 value={settings.email}
-                onChange={(e) => update({ email: e.target.value })}
+                onChange={(e) => update({ email: e.currentTarget.value })}
                 className="w-full border border-border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gray-400"
               />
             </div>
@@ -90,7 +90,7 @@ export default function SettingsPage() {
               </label>
               <select
                 value={settings.currency}
-                onChange={(e) => update({ currency: e.target.value })}
+                onChange={(e) => update({ currency: e.currentTarget.value })}
                 className="w-full border border-border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gray-400 bg-white"
               >
                 <option value="IDR">IDR</option>
@@ -115,7 +115,7 @@ export default function SettingsPage() {
               <input
                 type="checkbox"
                 checked={settings.notifyEmail}
-                onChange={(e) => update({ notifyEmail: e.target.checked })}
+                onChange={(e) => update({ notifyEmail: e.currentTarget.checked })}
                 className="w-4 h-4 rounded border-gray-300"
               />
             </label>
@@ -126,7 +126,7 @@ export default function SettingsPage() {
               <input
                 type="checkbox"
                 checked={settings.notifyProduct}
-                onChange={(e) => update({ notifyProduct: e.target.checked })}
+                onChange={(e) => update({ notifyProduct: e.currentTarget.checked })}
                 className="w-4 h-4 rounded border-gray-300"
               />
             </label>

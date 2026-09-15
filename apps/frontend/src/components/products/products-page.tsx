@@ -74,7 +74,7 @@ export default function ProductsPage() {
       if (!res.ok) {
         throw new Error(`HTTP ${res.status}`);
       }
-      const data = await res.json();
+      const data = (await res.json()) as Product[] | { value: Product[] };
       setProducts(Array.isArray(data) ? data : data.value || []);
     } catch (error) {
       console.error("Failed to fetch products:", error);
@@ -186,7 +186,7 @@ export default function ProductsPage() {
                     type="text"
                     required
                     value={form.name}
-                    onChange={(e) => setForm({ ...form, name: e.target.value })}
+                    onChange={(e) => setForm({ ...form, name: e.currentTarget.value })}
                     className="w-full border border-border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gray-400"
                   />
                 </div>
@@ -194,7 +194,7 @@ export default function ProductsPage() {
                   <label className="block text-sm font-medium text-foreground mb-1">Description</label>
                   <textarea
                     value={form.description}
-                    onChange={(e) => setForm({ ...form, description: e.target.value })}
+                    onChange={(e) => setForm({ ...form, description: e.currentTarget.value })}
                     className="w-full border border-border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gray-400"
                     rows={3}
                   />
@@ -207,7 +207,7 @@ export default function ProductsPage() {
                       required
                       step="0.01"
                       value={form.price}
-                      onChange={(e) => setForm({ ...form, price: e.target.value })}
+                      onChange={(e) => setForm({ ...form, price: e.currentTarget.value })}
                       className="w-full border border-border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gray-400"
                     />
                   </div>
@@ -217,7 +217,7 @@ export default function ProductsPage() {
                       type="number"
                       required
                       value={form.stock}
-                      onChange={(e) => setForm({ ...form, stock: Number(e.target.value) })}
+                      onChange={(e) => setForm({ ...form, stock: Number(e.currentTarget.value) })}
                       className="w-full border border-border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gray-400"
                     />
                   </div>
@@ -227,7 +227,7 @@ export default function ProductsPage() {
                   <input
                     type="text"
                     value={form.category}
-                    onChange={(e) => setForm({ ...form, category: e.target.value })}
+                    onChange={(e) => setForm({ ...form, category: e.currentTarget.value })}
                     className="w-full border border-border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gray-400"
                   />
                 </div>
@@ -236,7 +236,7 @@ export default function ProductsPage() {
                   <input
                     type="text"
                     value={form.imageUrl}
-                    onChange={(e) => setForm({ ...form, imageUrl: e.target.value })}
+                    onChange={(e) => setForm({ ...form, imageUrl: e.currentTarget.value })}
                     className="w-full border border-border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gray-400"
                   />
                 </div>
@@ -245,7 +245,7 @@ export default function ProductsPage() {
                     type="checkbox"
                     id="isActive"
                     checked={form.isActive}
-                    onChange={(e) => setForm({ ...form, isActive: e.target.checked })}
+                    onChange={(e) => setForm({ ...form, isActive: e.currentTarget.checked })}
                     className="w-4 h-4 rounded border-gray-300"
                   />
                   <label htmlFor="isActive" className="text-sm text-foreground">Active</label>
