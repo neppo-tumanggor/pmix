@@ -16,10 +16,7 @@
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "forceConsistentCasingInFileNames": true,
-    "lib": ["ES2023"],
-    "types": ["node"],
-    "baseUrl": ".",
-    "ignoreDeprecations": "6.0",
+    "lib": ["ES2023", "DOM", "DOM.Iterable"],
     "paths": {
       "@pmix/backend/*": ["apps/backend/src/*"],
       "@pmix/frontend/*": ["apps/frontend/src/*"],
