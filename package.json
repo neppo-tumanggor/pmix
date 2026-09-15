@@ -10,13 +10,13 @@
     "pmix": "./tools/scripts/pmix.cjs"
   },
   "scripts": {
-    "pmix": "node tools/scripts/pmix.cjs",
-    "dev": "pnpm pmix dev",
-    "build": "pnpm pmix build",
-    "start": "pnpm pmix start",
-    "stop": "pnpm pmix stop",
-    "restart": "pnpm pmix restart",
-    "status": "pnpm pmix status",
+
+    "dev": "pmix.cmd dev",
+    "build": "pmix.cmd build",
+    "start": "pmix.cmd start",
+    "stop": "pmix.cmd stop",
+    "restart": "pmix.cmd restart",
+    "status": "pmix.cmd status",
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
