@@ -1,6 +1,6 @@
-# pmix - Enterprise Marketing Automation Platform
+# pmix - Enterprise Marketing System Platform
 
-Enterprise-grade monorepo untuk Marketing Automation Platform menggunakan NestJS (backend) dan Next.js (frontend).
+Enterprise-grade monorepo untuk Marketing Platform menggunakan NestJS (backend) dan Next.js (frontend).
 
 ## 🎯 Current Status
 
@@ -39,9 +39,16 @@ cp .env.example .env
 # 4. Run migrations (creates SQLite database automatically)
 pnpm db:migrate
 
-# 5. Start development servers
-pnpm --filter backend run start:dev  # Backend: http://localhost:1457
-pnpm --filter frontend run dev        # Frontend: http://localhost:1458
+# 5. Start development environment
+pnpm dev    # or: pnpm start
+```
+
+
+Other useful commands:
+```bash
+pnpm stop      # Stop development environment
+pnpm restart   # Restart development environment
+pnpm status    # Show running status and PIDs
 ```
 
 **That's it!** Database file will be created at `./data/pmix_dev.sqlite`
@@ -70,8 +77,8 @@ psql -U postgres -d pmix_dev -c "GRANT ALL ON SCHEMA public TO postgres;"
 pnpm db:migrate
 
 # 6. Start servers
-pnpm --filter backend run start:dev
-pnpm --filter frontend run dev
+pnpm dev
+
 ```
 
 See [PostgreSQL Setup](#postgresql-setup-optional) section below for detailed instructions.
@@ -116,10 +123,10 @@ curl http://localhost:1457/health
 ### Daily Development
 ```bash
 # 1. Start backend (terminal 1)
-pnpm --filter backend run start:dev
+pnpm dev
 
 # 2. Start frontend (terminal 2)
-pnpm --filter frontend run dev
+pnpm dev
 
 # 3. Access application
 # Frontend: http://localhost:1458
@@ -231,6 +238,14 @@ pmix/
 
 ## 🛠️ Available Scripts
 
+```bash
+pnpm pmix dev      # Start development environment (backend + frontend)
+pnpm pmix start    # Alias for dev
+pnpm pmix stop     # Stop development environment
+pnpm pmix restart  # Restart development environment
+pnpm pmix status   # Show running status and PIDs
+```
+
 ### Root Level
 ```bash
 pnpm build          # Build all apps
@@ -245,7 +260,7 @@ pnpm db:seed        # Seed database
 
 ### Backend Only
 ```bash
-pnpm --filter backend run start:dev      # Start dev server
+pnpm dev      # Start dev server
 pnpm --filter backend run test           # Run unit tests
 pnpm --filter backend run test:e2e       # Run e2e tests
 pnpm --filter backend run db:migrate     # Run migrations
@@ -253,7 +268,7 @@ pnpm --filter backend run db:migrate     # Run migrations
 
 ### Frontend Only
 ```bash
-pnpm --filter frontend run dev           # Start dev server
+pnpm dev           # Start dev server
 pnpm --filter frontend run build         # Build for production
 pnpm --filter frontend run lint          # Lint code
 pnpm --filter frontend run test          # Run tests
@@ -407,7 +422,7 @@ pnpm db:migrate
 
 ```bash
 # Start backend server
-pnpm --filter backend run start:dev
+pnpm dev
 
 # Test health endpoint
 curl http://localhost:8080/health
@@ -677,4 +692,11 @@ pmix Development Team
 ---
 
 For more information, see [docs/](./docs/)
+
+
+
+
+
+
+
 

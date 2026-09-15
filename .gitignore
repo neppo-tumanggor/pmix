@@ -83,3 +83,6 @@ Dockerfile*
 # Documentation build
 docs/_build
 dist/data-source.js
+
+.pmix-processes.json
+

@@ -8,8 +8,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
-- Configured `NEXT_PUBLIC_API_URL=http://localhost:1457` in the root `.env` to align frontend API calls with the running backend server.
-- Restarted the Next.js frontend dev server to pick up the updated environment configuration.
+- `tools/scripts/pmix.cjs` — Cross-platform CLI for managing the PMIX development lifecycle.
+- Root npm scripts: `pnpm dev`, `pnpm start`, `pnpm stop`, `pnpm restart`, `pnpm status`.
+- `.pmix-processes.json` state tracking for backend/frontend PIDs with stale-state cleanup.
+- Process tree killing on Windows (`taskkill /T`) and Unix (process group `SIGTERM`/`SIGKILL`).
+- Idempotent `stop` and duplicate-start prevention.
+- Graceful shutdown on `SIGINT`/`SIGTERM` with rollback if frontend spawn fails.
+
+### Changed
+- Updated README quick start to use `pnpm dev` / `pnpm start` instead of long `pnpm --filter ...` commands.
 
 ### Changed
 - Restored the default application database path to SQLite/SQLJS by aligning the backend environment and runtime configuration around `DB_TYPE=sqljs` and `DB_DATABASE=./data/pmix_dev.sqlite`.
