@@ -21,6 +21,8 @@ Enterprise-grade monorepo untuk Marketing Platform menggunakan NestJS (backend) 
 
 ## ?? Quick Start
 
+**Note:** The pmix command is available globally from any terminal!
+
 ### ? Zero-Config Development (SQLite - DEFAULT)
 
 **No database installation required!** SQLite works out of the box.
@@ -106,7 +108,12 @@ This starts both backend and frontend in development mode with hot reload:
 
 ### Development Commands
 
-```bash
+`ash
+pmix dev       # Start development environment
+pmix status    # Show running status and PIDs
+pmix restart   # Restart development environment
+pmix stop      # Stop development environment
+`
 pmix dev       # Start development environment
 pmix status    # Show running status and PIDs
 pmix restart   # Restart development environment
@@ -153,7 +160,13 @@ This starts the production runtime:
 
 ### Production Commands
 
-```bash
+`ash
+pmix build     # Build for production
+pmix start     # Start production environment
+pmix status    # Show running status and PIDs
+pmix stop      # Stop production environment
+pmix restart   # Restart production environment
+`
 pmix build     # Build for production
 pmix start     # Start production environment
 pmix status    # Show running status and PIDs
@@ -168,30 +181,30 @@ pmix stop      # Stop production environment
 ```
 pmix/
 +-- apps/
-¦   +-- backend/           # NestJS API
-¦   ¦   +-- src/
-¦   ¦   ¦   +-- common/    # Shared utilities (guards, interceptors, etc)
-¦   ¦   ¦   +-- config/    # Configuration files
-¦   ¦   ¦   +-- modules/   # Feature modules (DDD pattern)
-¦   ¦   ¦   +-- infrastructure/  # External services
-¦   ¦   ¦   +-- shared/    # Shared backend code
-¦   ¦   +-- test/          # Backend tests
-¦   ¦   +-- migrations/    # Database migrations
-¦   ¦
-¦   +-- frontend/          # Next.js App
-¦       +-- src/
-¦       ¦   +-- app/       # Next.js App Router
-¦       ¦   +-- components/# React components
-¦       ¦   +-- hooks/     # Custom hooks
-¦       ¦   +-- lib/       # Utilities & API client
-¦       ¦   +-- stores/    # State management
-¦       ¦   +-- types/     # TypeScript types
-¦
+ï¿½   +-- backend/           # NestJS API
+ï¿½   ï¿½   +-- src/
+ï¿½   ï¿½   ï¿½   +-- common/    # Shared utilities (guards, interceptors, etc)
+ï¿½   ï¿½   ï¿½   +-- config/    # Configuration files
+ï¿½   ï¿½   ï¿½   +-- modules/   # Feature modules (DDD pattern)
+ï¿½   ï¿½   ï¿½   +-- infrastructure/  # External services
+ï¿½   ï¿½   ï¿½   +-- shared/    # Shared backend code
+ï¿½   ï¿½   +-- test/          # Backend tests
+ï¿½   ï¿½   +-- migrations/    # Database migrations
+ï¿½   ï¿½
+ï¿½   +-- frontend/          # Next.js App
+ï¿½       +-- src/
+ï¿½       ï¿½   +-- app/       # Next.js App Router
+ï¿½       ï¿½   +-- components/# React components
+ï¿½       ï¿½   +-- hooks/     # Custom hooks
+ï¿½       ï¿½   +-- lib/       # Utilities & API client
+ï¿½       ï¿½   +-- stores/    # State management
+ï¿½       ï¿½   +-- types/     # TypeScript types
+ï¿½
 +-- packages/
-¦   +-- shared-types/      # Shared TypeScript types
-¦   +-- shared-ui/         # Shared UI components
-¦   +-- shared-utils/      # Shared utilities
-¦
+ï¿½   +-- shared-types/      # Shared TypeScript types
+ï¿½   +-- shared-ui/         # Shared UI components
+ï¿½   +-- shared-utils/      # Shared utilities
+ï¿½
 +-- docs/                  # Documentation
 +-- tools/                 # Development tools
 +-- .github/               # CI/CD workflows

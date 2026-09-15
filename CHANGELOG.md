@@ -8,13 +8,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
-- `tools/scripts/pmix.cjs` — Cross-platform CLI for managing the PMIX lifecycle.
-- `pmix dev` — Start development environment (backend + frontend with hot reload).
-- `pmix build` — Build backend and frontend for production.
-- `pmix start` — Start production environment (compiled backend + next start).
-- `pmix stop` — Stop current environment.
-- `pmix restart` — Restart current environment (preserves runtime mode).
-- `pmix status` — Show service status and runtime mode.
+- `tools/scripts/pmix.cjs` ï¿½ Cross-platform CLI for managing the PMIX lifecycle.
+- `pmix dev` ï¿½ Start development environment (backend + frontend with hot reload).
+- `pmix build` ï¿½ Build backend and frontend for production.
+- `pmix start` ï¿½ Start production environment (compiled backend + next start).
+- `pmix stop` ï¿½ Stop current environment.
+- `pmix restart` ï¿½ Restart current environment (preserves runtime mode).
+- `pmix status` ï¿½ Show service status and runtime mode.
 - `.pmix-processes.json` state tracking with runtime mode (development/production).
 - Process tree killing on Windows (`taskkill /T`) and Unix (process group `SIGTERM`/`SIGKILL`).
 - Idempotent `stop` and duplicate-start prevention.
@@ -24,7 +24,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Separated development (`pmix dev`) and production (`pmix start`) runtime semantics.
 - Updated README with clear dev/prod sections and consistent commands.
-- PostgreSQL section now documented as production database configuration, not production runtime.
+- 
+- Simplified CLI - use pmix directly.
+- Fixed TypeScript build for production.
+- Backend now outputs .js files.
+- Production build works correctly.
 
 ## [0.3.0] - 2026-09-08
 
