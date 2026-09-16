@@ -5,9 +5,9 @@
   "type": "commonjs",
   "description": "NestJS Backend API Service",
   "scripts": {
-    "build": "nest build",
+    "build": "nest build -b tsc",
     "start": "nest start",
-    "start:dev": "nest start --watch",
+    "start:dev": "ts-node --transpile-only -r tsconfig-paths/register src/main.ts",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
     "lint": "eslint \"src/**/*.ts\" \"test/**/*.ts\"",
@@ -24,7 +24,6 @@
     "clean": "rm -rf dist .turbo"
   },
   "dependencies": {
-    "@pmix/shared-types": "workspace:*",
     "@nestjs-modules/mailer": "^2.3.7",
     "@nestjs/common": "^12.0.1",
     "@nestjs/config": "^12.0.0",
@@ -32,8 +31,9 @@
     "@nestjs/jwt": "^10.2.0",
     "@nestjs/passport": "^10.0.3",
     "@nestjs/platform-express": "^12.0.1",
-    "@nestjs/swagger": "^7.0.0",
+    "@nestjs/swagger": "^12.0.1",
     "@nestjs/throttler": "^5.0.0",
+    "@pmix/shared-types": "workspace:*",
     "bcrypt": "^5.1.1",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.15.1",
@@ -78,6 +78,7 @@
     "ts-loader": "^9.6.2",
     "ts-node": "^10.9.2",
     "tsconfig-paths-webpack-plugin": "^4.2.0",
+    "tsx": "^4.23.13",
     "typescript": "^6.0.2",
     "vite-tsconfig-paths": "^5.1.4",
     "vitest": "^4.1.2",

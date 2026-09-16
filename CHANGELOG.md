@@ -30,6 +30,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Backend now outputs .js files.
 - Production build works correctly.
 
+### Fixed
+- Fixed database persistence issue by enabling sqljs auto-save with 5-second interval
+- Fixed duplicate `bootstrap()` call in `main.ts` that caused EADDRINUSE errors
+- Resolved port conflicts by changing default port from 3000 to 5000
+- Fixed TypeOrmModule access error by removing custom save logic (auto-save now handles persistence)
+- Database now persists data across server restarts using sqljs with auto-save configuration
+- Added `location` parameter to sqljs driver for proper file-based persistence
+- Enabled `synchronize: true` for automatic table creation in development
+
 ## [0.3.0] - 2026-09-08
 
 ### Added

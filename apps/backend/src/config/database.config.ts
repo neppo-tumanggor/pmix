@@ -46,7 +46,7 @@ export function getDatabaseConfig(configService: ConfigService): TypeOrmModuleOp
       UserMetadata,
     ],
     migrations: [__dirname + '/../../migrations/*{.ts,.js}'],
-    synchronize: false,
+    synchronize: true, // Enable to create tables automatically
     logging: configService.get('DB_LOGGING', false),
   };
 
@@ -86,5 +86,10 @@ export function getDatabaseConfig(configService: ConfigService): TypeOrmModuleOp
     ...baseConfig,
     type: 'sqljs',
     database: loadSqliteDatabase(configService.get<string>('DB_DATABASE', './data/pmix_dev.sqlite')),
+    autoSave: {
+      enabled: true,
+      interval: 5000, // Save every 5 seconds
+    },
+    location: configService.get<string>('DB_DATABASE', './data/pmix_dev.sqlite'),
   } as any as TypeOrmModuleOptions;
 }
