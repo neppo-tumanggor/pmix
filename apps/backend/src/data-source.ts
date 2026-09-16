@@ -66,15 +66,6 @@ const AppDataSource = dbType === 'postgres'
       synchronize: false,
       logging: process.env.DB_LOGGING === 'true',
     })
-  : dbType === 'sqlite'
-    ? new DataSource({
-        type: 'sqlite',
-        database: process.env.DB_DATABASE || './data/pmix_dev.sqlite',
-        entities,
-        migrations: ['./dist/migrations/*.js'],
-        synchronize: false,
-        logging: process.env.DB_LOGGING === 'true',
-      })
     : new DataSource({
         type: 'sqljs',
         database: loadSqliteDatabase(process.env.DB_DATABASE || './data/pmix_dev.sqlite'),
