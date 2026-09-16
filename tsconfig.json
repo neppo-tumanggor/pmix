@@ -38,6 +38,6 @@
         "packages/shared-utils/src"
       ]
     },
-    "ignoreDeprecations": "6.0"
+  
   }
 }

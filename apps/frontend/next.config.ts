@@ -3,7 +3,7 @@ import { withSentryConfig } from '@sentry/nextjs';
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
-  swcMinify: true,
+  
   experimental: {
     serverActions: {
       bodySizeLimit: '2mb',
