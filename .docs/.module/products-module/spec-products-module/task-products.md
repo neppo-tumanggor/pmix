@@ -180,11 +180,11 @@ This document provides a detailed breakdown of all tasks required to implement t
 **Estimated Time**: 1.5 hours
 
 **Actions**:
-- [ ] Create CreateProductDto with validation decorators
-- [ ] Create UpdateProductDto with optional fields
-- [ ] Create ProductQueryDto for filters and pagination
-- [ ] Add validation rules
-- [ ] Add Swagger decorators
+- [x] Create CreateProductDto with validation decorators
+- [x] Create UpdateProductDto with optional fields
+- [x] Create ProductQueryDto for filters and pagination
+- [x] Add validation rules
+- [x] Add Swagger decorators
 
 **Acceptance Criteria**:
 - All DTOs validate input correctly
@@ -197,7 +197,7 @@ This document provides a detailed breakdown of all tasks required to implement t
 **Actions**:
 - [ ] Create CreateCategoryDto
 - [ ] Create UpdateCategoryDto
-- [ ] Add validation rules
+- [x] Add validation rules
 
 **Acceptance Criteria**:
 - Category DTOs validated correctly
