@@ -222,14 +222,14 @@ This document provides a detailed breakdown of all tasks required to implement t
 **Estimated Time**: 3 hours
 
 **Actions**:
-- [ ] Implement create() method
-- [ ] Implement findAll() with QueryBuilder and filters
-- [ ] Implement findOne() with tenant isolation
-- [ ] Implement update() using preload
-- [ ] Implement remove() for soft delete
-- [ ] Implement restore() for soft-deleted products
-- [ ] Implement bulkImport() for CSV import
-- [ ] Implement export() for CSV export
+- [x] Implement create() method
+- [x] Implement findAll() with QueryBuilder and filters
+- [x] Implement findOne() with tenant isolation
+- [x] Implement update() using preload
+- [x] Implement remove() for soft delete
+- [x] Implement restore() for soft-deleted products
+- [x] Implement bulkImport() for CSV import
+- [x] Implement export() for CSV export
 
 **Acceptance Criteria**:
 - All CRUD operations work
