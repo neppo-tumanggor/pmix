@@ -43,6 +43,9 @@ export class AuditLog extends TenantEntity {
     length: 255,
   })
   resourceId: string;
+  @Column({ name: 'changes', type: 'simple-json', nullable: true })
+  changes: Record<string, any>;
+
 
   @Column({
     name: 'old_values',

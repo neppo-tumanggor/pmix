@@ -1,5 +1,6 @@
 # pmix - Enterprise Marketing System Platform
 
+get deeper insight about your product and market
 Enterprise-grade monorepo untuk Marketing Platform menggunakan NestJS (backend) dan Next.js (frontend).
 
 ## ?? Current Status

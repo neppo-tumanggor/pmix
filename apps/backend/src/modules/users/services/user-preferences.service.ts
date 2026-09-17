@@ -1,11 +1,11 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { IUserPreferencesRepository } from '../interfaces/user-preferences.repository.interface';
+import { UserPreferencesRepository } from '../repositories/user-preferences.repository';
 import { UserPreferences } from '../entities/user-preferences.entity';
 
 @Injectable()
 export class UserPreferencesService {
   constructor(
-    private readonly preferencesRepository: IUserPreferencesRepository,
+    private readonly preferencesRepository: UserPreferencesRepository,
   ) {}
 
   async getPreferences(userId: string): Promise<UserPreferences> {

@@ -7,7 +7,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, IsNull } from 'typeorm';
 import { User, UserRole } from './entities/user.entity';
 import { RefreshToken } from './entities/refresh-token.entity';
 import { RegisterDto } from './dto/register.dto';
@@ -117,7 +117,7 @@ export class AuthService {
 
   async refreshToken(refreshTokenDto: RefreshTokenDto): Promise<LoginResponse> {
     const { refreshToken } = refreshTokenDto;
-    let payload: JwtPayload;
+    let payload: JwtPayload | any;
     try {
       payload = this.tokenService.verifyRefreshToken(refreshToken);
     } catch (error) {
@@ -186,7 +186,7 @@ export class AuthService {
 
   async resetPassword(resetPasswordDto: ResetPasswordDto): Promise<void> {
     const { token, password } = resetPasswordDto;
-    const allUsers = await this.userRepository.find({ where: { deletedAt: null } });
+    const allUsers = await this.userRepository.find({ where: { deletedAt: IsNull() } });
     const user = allUsers.find((u) => {
       if (!u.passwordResetToken || !u.passwordResetExpires) return false;
       return this.passwordService.verify(token, u.passwordResetToken);
@@ -215,7 +215,7 @@ export class AuthService {
 
   async verifyEmail(verifyEmailDto: VerifyEmailDto): Promise<void> {
     const { token } = verifyEmailDto;
-    const allUsers = await this.userRepository.find({ where: { emailVerified: false, deletedAt: null } });
+    const allUsers = await this.userRepository.find({ where: { emailVerified: false, deletedAt: IsNull() } });
     const user = allUsers.find((u) => {
       if (!u.emailVerificationToken || !u.emailVerificationExpires) return false;
       return this.passwordService.verify(token, u.emailVerificationToken);

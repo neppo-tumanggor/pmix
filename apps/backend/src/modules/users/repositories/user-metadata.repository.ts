@@ -5,7 +5,7 @@ import { IUserMetadataRepository } from '../interfaces/user-metadata.repository.
 import { UserMetadata } from '../entities/user-metadata.entity';
 
 @Injectable()
-export class UserMetadataRepository implements IUserMetadataRepository {
+export class UserMetadataRepository {
   constructor(
     @InjectRepository(UserMetadata)
     private readonly metadataRepository: Repository<UserMetadata>,

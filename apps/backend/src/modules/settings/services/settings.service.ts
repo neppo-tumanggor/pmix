@@ -2,8 +2,8 @@ import { Injectable, NotFoundException, ConflictException } from '@nestjs/common
 import { DataSource } from 'typeorm';
 import { Settings, SettingCategory } from '../entities/settings.entity';
 import { AuditLog, AuditAction } from '../entities/audit-log.entity';
-import { ISettingsRepository } from '../interfaces/settings.repository.interface';
-import { IAuditLogRepository } from '../interfaces/audit-log.repository.interface';
+import { SettingsRepository } from '../repositories/settings.repository';
+import { AuditLogRepository } from '../repositories/audit-log.repository';
 import { EncryptionService } from './encryption.service';
 import { CacheService } from './cache.service';
 import { EntityManager } from 'typeorm';
@@ -11,8 +11,8 @@ import { EntityManager } from 'typeorm';
 @Injectable()
 export class SettingsService {
   constructor(
-    private readonly settingsRepository: ISettingsRepository,
-    private readonly auditLogRepository: IAuditLogRepository,
+    private readonly settingsRepository: SettingsRepository,
+    private readonly auditLogRepository: AuditLogRepository,
     private readonly encryptionService: EncryptionService,
     private readonly cacheService: CacheService,
     private readonly dataSource: DataSource,

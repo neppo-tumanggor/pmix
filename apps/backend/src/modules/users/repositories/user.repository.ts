@@ -5,7 +5,7 @@ import { IUserRepository } from '../interfaces/user.repository.interface';
 import { User } from '../../auth/entities/user.entity';
 
 @Injectable()
-export class UserRepository implements IUserRepository {
+export class UserRepository {
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
@@ -89,5 +89,17 @@ export class UserRepository implements IUserRepository {
       .where('id IN (:...userIds)', { userIds })
       .execute();
     return result.affected || 0;
+  }
+
+  findOne(options: any): Promise<User | null> {
+    return this.userRepository.findOne(options);
+  }
+
+  save(user: Partial<User>): Promise<User> {
+    return this.userRepository.save(user);
+  }
+
+  async softDelete(id: string): Promise<void> {
+    await this.userRepository.softDelete(id);
   }
 }

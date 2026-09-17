@@ -1,7 +1,7 @@
-import { EntityRepository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { User } from '../../auth/entities/user.entity';
 
-export interface IUserRepository extends EntityRepository<User> {
+export interface IUserRepository extends Repository<User> {
   findByEmail(email: string): Promise<User | null>;
   findByTenant(tenantId: string): Promise<User[]>;
   search(query: string, tenantId: string, filters?: any): Promise<User[]>;

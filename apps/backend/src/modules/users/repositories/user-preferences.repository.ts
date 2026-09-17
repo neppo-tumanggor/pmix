@@ -5,7 +5,7 @@ import { IUserPreferencesRepository } from '../interfaces/user-preferences.repos
 import { UserPreferences } from '../entities/user-preferences.entity';
 
 @Injectable()
-export class UserPreferencesRepository implements IUserPreferencesRepository {
+export class UserPreferencesRepository  {
   constructor(
     @InjectRepository(UserPreferences)
     private readonly preferencesRepository: Repository<UserPreferences>,
@@ -20,7 +20,7 @@ export class UserPreferencesRepository implements IUserPreferencesRepository {
     tenantId: string,
     data: Partial<UserPreferences>,
   ): Promise<UserPreferences> {
-    let preferences = await this.findByUserId(userId);
+    let preferences: UserPreferences | null = await this.findByUserId(userId);
 
     if (!preferences) {
       preferences = this.preferencesRepository.create({
@@ -29,9 +29,9 @@ export class UserPreferencesRepository implements IUserPreferencesRepository {
         ...data,
       });
     } else {
-      preferences = { ...preferences, ...data };
+      preferences = { ...preferences, ...data } as UserPreferences;
     }
 
-    return this.preferencesRepository.save(preferences);
+    return this.preferencesRepository.save(preferences as any);
   }
 }

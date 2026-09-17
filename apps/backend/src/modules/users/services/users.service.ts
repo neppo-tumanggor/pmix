@@ -1,13 +1,14 @@
 import { Injectable, NotFoundException, ConflictException, BadRequestException } from '@nestjs/common';
-import { IUserRepository } from '../interfaces/user.repository.interface';
 import { User } from '../../auth/entities/user.entity';
 import { UserPreferences } from '../entities/user-preferences.entity';
+import { UserRepository } from '../repositories/user.repository';
+import { UserPreferencesRepository } from '../repositories/user-preferences.repository';
 
 @Injectable()
 export class UsersService {
   constructor(
-    private readonly userRepository: IUserRepository,
-    private readonly preferencesRepository: any,
+    private readonly userRepository: UserRepository,
+    private readonly preferencesRepository: UserPreferencesRepository,
   ) {}
 
   async getProfile(userId: string): Promise<Partial<User>> {
@@ -44,8 +45,8 @@ export class UsersService {
     ];
 
     allowedFields.forEach(field => {
-      if (data[field] !== undefined) {
-        (user as any)[field] = data[field];
+      if ((data as any)[field] !== undefined) {
+        (user as any)[field] = (data as any)[field];
       }
     });
 

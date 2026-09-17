@@ -27,6 +27,7 @@ export class UpdateSettingsDto {
       timezone: 'UTC',
     },
     type: 'object',
+    additionalProperties: true,
   })
   @IsObject()
   @ValidateNested({ each: true })

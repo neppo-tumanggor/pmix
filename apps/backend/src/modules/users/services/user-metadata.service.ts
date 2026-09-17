@@ -1,11 +1,11 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { IUserMetadataRepository } from '../interfaces/user-metadata.repository.interface';
+import { UserMetadataRepository } from '../repositories/user-metadata.repository';
 import { UserMetadata } from '../entities/user-metadata.entity';
 
 @Injectable()
 export class UserMetadataService {
   constructor(
-    private readonly metadataRepository: IUserMetadataRepository,
+    private readonly metadataRepository: UserMetadataRepository,
   ) {}
 
   async getAllMetadata(userId: string): Promise<Record<string, any>> {

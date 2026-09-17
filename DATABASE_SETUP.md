@@ -1,5 +1,9 @@
 # Database Setup Guide
 
+## Default Database
+
+This application defaults to SQLite/SQLJS for development. PostgreSQL support remains available when the environment variable `DB_TYPE=postgres` is explicitly set.
+
 ## Quick Start
 
 ### Automated Setup (Recommended)

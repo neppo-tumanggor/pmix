@@ -24,7 +24,8 @@ export class EncryptionService {
       throw new Error('ENCRYPTION_KEY environment variable is not set');
     }
 
-    if (key.length !== this.keyLength) {
+    const keyBuffer = Buffer.from(key, 'hex');
+    if (keyBuffer.length !== this.keyLength) {
       throw new Error(
         `ENCRYPTION_KEY must be ${this.keyLength} bytes (${this.keyLength * 8} bits)`,
       );

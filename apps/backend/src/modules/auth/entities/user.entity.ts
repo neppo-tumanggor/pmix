@@ -43,23 +43,29 @@ export class User {
   @Column({ name: 'email_verified', default: false })
   emailVerified: boolean;
 
-  @Column({ name: 'email_verification_token', length: 255, nullable: true })
-  emailVerificationToken: string;
+  @Column({ name: 'email_verification_token', type: 'varchar', length: 255, nullable: true })
+  emailVerificationToken: string | null;
 
   @Column({ name: 'email_verification_expires', type: 'datetime', nullable: true })
-  emailVerificationExpires: Date;
+  emailVerificationExpires: Date | null;
 
-  @Column({ name: 'password_reset_token', length: 255, nullable: true, unique: true })
-  passwordResetToken: string;
+  @Column({ name: 'password_reset_token', type: 'varchar', length: 255, nullable: true, unique: true })
+  passwordResetToken: string | null;
 
   @Column({ name: 'password_reset_expires', type: 'datetime', nullable: true })
-  passwordResetExpires: Date;
+  passwordResetExpires: Date | null;
 
   @Column({ name: 'failed_login_attempts', default: 0 })
   failedLoginAttempts: number;
 
   @Column({ name: 'locked_until', type: 'datetime', nullable: true })
-  lockedUntil: Date;
+  lockedUntil: Date | null;
+
+  @Column({ name: 'tenant_id', type: 'varchar', length: 255, nullable: true })
+  tenantId: string | null;
+
+  @Column({ default: 'active' })
+  status: string;
 
   @Column({ name: 'last_login', type: 'datetime', nullable: true })
   lastLogin: Date;
@@ -71,7 +77,7 @@ export class User {
   updatedAt: Date;
 
   @DeleteDateColumn({ name: 'deleted_at', nullable: true })
-  deletedAt: Date;
+  deletedAt: Date | null;
 
   @OneToMany(() => RefreshToken, (token) => token.user)
   refreshTokens: RefreshToken[];

@@ -47,7 +47,7 @@ export class SessionService {
    * @param refreshToken - Refresh token
    * @returns Session or undefined
    */
-  async findByRefreshToken(refreshToken: string): Promise<Session | undefined> {
+  async findByRefreshToken(refreshToken: string): Promise<Session | null> {
     return this.sessionRepository.findOne({
       where: { refreshToken },
     });

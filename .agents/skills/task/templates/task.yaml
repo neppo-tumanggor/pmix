@@ -1,0 +1,173 @@
+# ============================================================
+# AI CODING AGENT - TASK TEMPLATE
+# ============================================================
+
+module:
+  name: "<MODULE_NAME>"
+  spec_id: "<SPEC_ID>"
+  priority: "<P0|P1|P2|P3>"
+  status: "<draft|ready|in_progress|completed>"
+
+# ============================================================
+# EXECUTION RULES
+# ============================================================
+
+execution_rules:
+  - "Execute tasks according to dependencies."
+  - "Do not start a task if its dependencies are incomplete."
+  - "Complete implementation before marking a task as done."
+  - "Run all required validations."
+  - "Do not mark a task as done if validation fails."
+  - "Do not modify files outside the defined scope unless required."
+  - "Report blockers instead of making unsupported assumptions."
+
+# ============================================================
+# TASK DEPENDENCIES
+# ============================================================
+
+execution_waves:
+
+  - wave: <NUMBER>
+    tasks:
+      - "<TASK_ID>"
+
+# ============================================================
+# TASKS
+# ============================================================
+
+tasks:
+
+  - id: "<TASK_ID>"
+    name: "<TASK_NAME>"
+
+    priority: "<P0|P1|P2|P3>"
+    status: "<todo|in_progress|blocked|done>"
+
+    depends_on:
+      - "<TASK_ID>"
+
+    requirements:
+      - "<REQUIREMENT_ID>"
+
+    owner: "<ROLE>"
+
+    estimate:
+      value: <NUMBER>
+      unit: "<hour|day>"
+
+    objective: |
+      <DESCRIBE THE RESULT THAT THIS TASK MUST ACHIEVE>
+
+    # --------------------------------------------------------
+    # IMPLEMENTATION SCOPE
+    # --------------------------------------------------------
+
+    scope:
+
+      create:
+        - "<FILE_PATH>"
+
+      modify:
+        - "<FILE_PATH>"
+
+      delete: []
+
+      do_not_modify:
+        - "<FILE_PATH_OR_DIRECTORY>"
+
+    # --------------------------------------------------------
+    # SUBTASKS
+    # --------------------------------------------------------
+
+    subtasks:
+
+      - id: "<SUBTASK_ID>"
+        name: "<SUBTASK_NAME>"
+
+        items:
+
+          - id: "<ITEM_ID>"
+            action: "<IMPLEMENTATION_ACTION>"
+
+          - id: "<ITEM_ID>"
+            action: "<IMPLEMENTATION_ACTION>"
+
+    # --------------------------------------------------------
+    # ACCEPTANCE CRITERIA
+    # --------------------------------------------------------
+
+    acceptance_criteria:
+
+      - id: "<AC_ID>"
+        criteria: "<EXPECTED_BEHAVIOR>"
+        verification: "<HOW_TO_VERIFY>"
+
+    # --------------------------------------------------------
+    # VALIDATION
+    # --------------------------------------------------------
+
+    validation:
+
+      commands:
+
+        - name: "<VALIDATION_NAME>"
+          command: "<COMMAND>"
+          required: true
+
+      checks:
+
+        - "<VALIDATION_CHECK>"
+
+    # --------------------------------------------------------
+    # EXIT CRITERIA
+    # --------------------------------------------------------
+
+    exit_criteria:
+
+      - "<CONDITION_REQUIRED_TO COMPLETE_TASK>"
+      - "<CONDITION_REQUIRED_TO COMPLETE_TASK>"
+
+    # --------------------------------------------------------
+    # DELIVERABLES
+    # --------------------------------------------------------
+
+    deliverables:
+
+      files:
+        - "<FILE_PATH>"
+
+      documentation:
+        - "<DOCUMENT_PATH>"
+
+      reports: []
+
+# ============================================================
+# DEFINITION OF DONE
+# ============================================================
+
+definition_of_done:
+
+  - "All subtasks are completed."
+  - "Implementation matches requirements."
+  - "Acceptance criteria are satisfied."
+  - "Code compiles successfully."
+  - "Required tests pass."
+  - "Required validation commands pass."
+  - "No critical errors remain."
+  - "Required documentation is updated."
+
+# ============================================================
+# FINAL VALIDATION
+# ============================================================
+
+final_validation:
+
+  commands:
+    - "<BUILD_COMMAND>"
+    - "<TEST_COMMAND>"
+    - "<LINT_COMMAND>"
+
+  requirements:
+    - "All required tasks are completed."
+    - "All required validations pass."
+    - "No unresolved critical blocker exists."

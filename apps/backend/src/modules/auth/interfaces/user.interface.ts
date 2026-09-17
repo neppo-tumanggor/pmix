@@ -1,4 +1,4 @@
-import { UserRole } from '../../constants/roles.enum';
+import { UserRole } from '../entities/user.entity';
 
 export interface User {
   id: string;
