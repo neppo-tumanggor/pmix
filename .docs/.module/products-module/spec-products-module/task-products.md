@@ -195,8 +195,8 @@ This document provides a detailed breakdown of all tasks required to implement t
 **Estimated Time**: 30 minutes
 
 **Actions**:
-- [ ] Create CreateCategoryDto
-- [ ] Create UpdateCategoryDto
+- [x] Create CreateCategoryDto
+- [x] Create UpdateCategoryDto
 - [x] Add validation rules
 
 **Acceptance Criteria**:
