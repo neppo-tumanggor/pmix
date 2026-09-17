@@ -9,6 +9,7 @@ import { Session } from './modules/auth/entities/session.entity';
 import { PasswordHistory } from './modules/auth/entities/password-history.entity';
 
 import { Product } from './modules/products/entities/product.entity';
+import { ProductCategory } from './modules/products/entities/product-category.entity';
 
 import { Settings } from './modules/settings/entities/settings.entity';
 import { AuditLog } from './modules/settings/entities/audit-log.entity';
@@ -47,6 +48,7 @@ const entities = [
   Session,
   PasswordHistory,
   Product,
+  ProductCategory,
   Settings,
   AuditLog,
   UserPreferences,
