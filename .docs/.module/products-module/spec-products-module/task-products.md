@@ -344,11 +344,11 @@ This document provides a detailed breakdown of all tasks required to implement t
 **Estimated Time**: 2 hours
 
 **Actions**:
-- [ ] Test create() method
-- [ ] Test findAll() method
-- [ ] Test findOne() method
-- [ ] Test update() method
-- [ ] Test remove() method
+- [x] Test create() method
+- [x] Test findAll() method
+- [x] Test findOne() method
+- [x] Test update() method
+- [x] Test remove() method
 - [ ] Test restore() method
 - [ ] Test bulkImport() method
 - [ ] Test export() method
