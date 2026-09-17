@@ -276,16 +276,16 @@ This document provides a detailed breakdown of all tasks required to implement t
 **Estimated Time**: 2.5 hours
 
 **Actions**:
-- [ ] Create ProductsController with proper decorators
-- [ ] Implement POST /products (create)
-- [ ] Implement GET /products (findAll)
-- [ ] Implement GET /products/:id (findOne)
-- [ ] Implement PATCH /products/:id (update)
-- [ ] Implement DELETE /products/:id (remove)
-- [ ] Implement POST /products/:id/restore (restore)
-- [ ] Implement POST /products/bulk-import (bulkImport)
-- [ ] Implement GET /products/export (export)
-- [ ] Add Swagger documentation for all endpoints
+- [x] Create ProductsController with proper decorators
+- [x] Implement POST /products (create)
+- [x] Implement GET /products (findAll)
+- [x] Implement GET /products/:id (findOne)
+- [x] Implement PATCH /products/:id (update)
+- [x] Implement DELETE /products/:id (remove)
+- [x] Implement POST /products/:id/restore (restore)
+- [x] Implement POST /products/bulk-import (bulkImport)
+- [x] Implement GET /products/export (export)
+- [x] Add Swagger documentation for all endpoints
 
 **Acceptance Criteria**:
 - All endpoints implemented
