@@ -376,11 +376,11 @@ This document provides a detailed breakdown of all tasks required to implement t
 **Estimated Time**: 3 hours
 
 **Actions**:
-- [ ] Test POST /products (create)
-- [ ] Test GET /products (findAll)
-- [ ] Test GET /products/:id (findOne)
-- [ ] Test PATCH /products/:id (update)
-- [ ] Test DELETE /products/:id (remove)
+- [x] Test POST /products (create)
+- [x] Test GET /products (findAll)
+- [x] Test GET /products/:id (findOne)
+- [x] Test PATCH /products/:id (update)
+- [x] Test DELETE /products/:id (remove)
 - [ ] Test POST /products/:id/restore (restore)
 - [ ] Test GET /products/categories
 - [ ] Test POST /products/categories
