@@ -21,7 +21,8 @@
     "db:rollback": "pnpm build:datasource && typeorm migration:revert -d dist/data-source.js",
     "db:generate": "pnpm build:datasource && typeorm migration:generate -d dist/data-source.js -n",
     "db:seed": "ts-node src/migrations/seed/seed.ts",
-    "clean": "rm -rf dist .turbo"
+    "clean": "rm -rf dist .turbo",
+    "perf:test": "ts-node --transpile-only -r tsconfig-paths/register src/modules/products/scripts/run-performance-test.ts"
   },
   "dependencies": {
     "@nestjs-modules/mailer": "^2.3.7",
