@@ -242,12 +242,12 @@ This document provides a detailed breakdown of all tasks required to implement t
 **Estimated Time**: 1.5 hours
 
 **Actions**:
-- [ ] Implement getCategories()
-- [ ] Implement createCategory()
-- [ ] Implement updateCategory()
-- [ ] Implement deleteCategory()
+- [x] Implement getCategories()
+- [x] Implement createCategory()
+- [x] Implement updateCategory()
+- [x] Implement deleteCategory()
 - [ ] Validate category name uniqueness
-- [ ] Check if category is empty before delete
+- [x] Check if category is empty before delete
 
 **Acceptance Criteria**:
 - Category CRUD works
