@@ -27,7 +27,8 @@
     "test:e2e": "vitest run --config ./vitest.config.e2e.ts",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "deploy": "nest deploy",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "perf:test": "cd apps/backend && pnpm perf:test"
   },
   "dependencies": {
     "@nestjs/common": "^12.0.1",

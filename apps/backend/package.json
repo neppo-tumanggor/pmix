@@ -22,7 +22,8 @@
     "db:generate": "pnpm build:datasource && typeorm migration:generate -d dist/data-source.js -n",
     "db:seed": "ts-node src/migrations/seed/seed.ts",
     "clean": "rm -rf dist .turbo",
-    "perf:test": "ts-node --transpile-only -r tsconfig-paths/register src/modules/products/scripts/run-performance-test.ts"
+    "perf:test": "ts-node --transpile-only -r tsconfig-paths/register src/modules/products/scripts/run-performance-test.ts",
+    "perf:seed": "ts-node --transpile-only -r tsconfig-paths/register src/modules/products/scripts/seed-for-user.ts"
   },
   "dependencies": {
     "@nestjs-modules/mailer": "^2.3.7",
