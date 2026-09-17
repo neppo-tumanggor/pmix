@@ -13,6 +13,7 @@ import { Roles } from '../../auth/decorators/roles.decorator';
 import { UserRole } from '../../constants/roles.enum';
 import { Product } from './entities/product.entity';
 import { ProductCategory } from './entities/product-category.entity';
+import { ProductCategory } from './entities/product-category.entity';
 
 @ApiTags('Products')
 @Controller('products')
@@ -127,5 +128,56 @@ export class ProductsController {
   @ApiResponse({ status: 403, description: 'Forbidden' })
   export(@Param('tenantId') tenantId: string) {
     return this.productsService.export(tenantId);
+  }
+}
+
+  // Category endpoints
+  @Get('categories')
+  @UseGuards(JwtAuthGuard)
+  @ApiOperation({ summary: 'Get all categories' })
+  @ApiResponse({ status: 200, description: 'Categories retrieved successfully', type: [ProductCategory] })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  getCategories(@Param('tenantId') tenantId: string): Promise<ProductCategory[]> {
+    return this.productsService.getCategories(tenantId);
+  }
+
+  @Post('categories')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.ADMIN, UserRole.MANAGER)
+  @ApiOperation({ summary: 'Create a new category' })
+  @ApiResponse({ status: 201, description: 'Category created successfully', type: ProductCategory })
+  @ApiResponse({ status: 400, description: 'Bad request' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  createCategory(@Body() createCategoryDto: CreateCategoryDto, @Param('tenantId') tenantId: string): Promise<ProductCategory> {
+    return this.productsService.createCategory(tenantId, createCategoryDto);
+  }
+
+  @Patch('categories/:id')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.ADMIN, UserRole.MANAGER)
+  @ApiOperation({ summary: 'Update category' })
+  @ApiParam({ name: 'id', description: 'Category ID' })
+  @ApiResponse({ status: 200, description: 'Category updated', type: ProductCategory })
+  @ApiResponse({ status: 404, description: 'Category not found' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  updateCategory(@Param('id') id: string, @Body() updateCategoryDto: UpdateCategoryDto, @Param('tenantId') tenantId: string): Promise<ProductCategory> {
+    return this.productsService.updateCategory(tenantId, id, updateCategoryDto);
+  }
+
+  @Delete('categories/:id')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.ADMIN, UserRole.MANAGER)
+  @ApiOperation({ summary: 'Delete category' })
+  @ApiParam({ name: 'id', description: 'Category ID' })
+  @ApiResponse({ status: 204, description: 'Category deleted' })
+  @ApiResponse({ status: 404, description: 'Category not found' })
+  @ApiResponse({ status: 400, description: 'Category has products' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  deleteCategory(@Param('id') id: string, @Param('tenantId') tenantId: string): Promise<void> {
+    return this.productsService.deleteCategory(tenantId, id);
   }
 }
