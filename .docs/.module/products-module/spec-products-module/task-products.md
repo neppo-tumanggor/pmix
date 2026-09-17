@@ -150,10 +150,10 @@ This document provides a detailed breakdown of all tasks required to implement t
 **Estimated Time**: 2 hours
 
 **Actions**:
-- [ ] Implement IProductsRepository
-- [ ] Use TypeORM Repository<Product>
-- [ ] Implement create(), findAll(), findOne(), update(), softDelete(), restore()
-- [ ] Add QueryBuilder for complex queries
+- [x] Implement IProductsRepository
+- [x] Use TypeORM Repository<Product>
+- [x] Implement create(), findAll(), findOne(), update(), softDelete(), restore()
+- [x] Add QueryBuilder for complex queries
 
 **Acceptance Criteria**:
 - All CRUD operations implemented
