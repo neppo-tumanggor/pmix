@@ -11,6 +11,8 @@ import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../../auth/guards/roles.guard';
 import { Roles } from '../../auth/decorators/roles.decorator';
 import { UserRole } from '../../constants/roles.enum';
+import { TenantGuard } from '../../auth/guards/tenant.guard';
+import { TenantId } from '../../auth/decorators/tenant-id.decorator';
 import { Product } from './entities/product.entity';
 import { ProductCategory } from './entities/product-category.entity';
 import { ProductCategory } from './entities/product-category.entity';

@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { ProductsRepository } from '../src/modules/products/repositories/products.repository';
-import { Product } from '../src/modules/products/entities/product.entity';
+import { ProductsRepository } from '../../repositories/products.repository';
+import { Product } from '../../entities/product.entity';
 import { Repository } from 'typeorm';
 
 describe('ProductsRepository', () => {
