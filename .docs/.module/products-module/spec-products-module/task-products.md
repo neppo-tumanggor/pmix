@@ -93,10 +93,10 @@ This document provides a detailed breakdown of all tasks required to implement t
 **Estimated Time**: 45 minutes
 
 **Actions**:
-- [ ] Define Product entity extending TenantEntity
-- [ ] Add all product fields
-- [ ] Configure column types and constraints
-- [ ] Add indexes via decorators
+- [x] Define Product entity extending TenantEntity
+- [x] Add all product fields
+- [x] Configure column types and constraints
+- [x] Add indexes via decorators
 
 **Acceptance Criteria**:
 - Entity compiles without errors
@@ -106,9 +106,9 @@ This document provides a detailed breakdown of all tasks required to implement t
 **Estimated Time**: 30 minutes
 
 **Actions**:
-- [ ] Define ProductCategory entity extending TenantEntity
-- [ ] Add category fields
-- [ ] Configure parent_id for hierarchical structure
+- [x] Define ProductCategory entity extending TenantEntity
+- [x] Add category fields
+- [x] Configure parent_id for hierarchical structure
 
 **Acceptance Criteria**:
 - Entity compiles without errors
