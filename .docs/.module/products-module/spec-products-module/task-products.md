@@ -258,11 +258,11 @@ This document provides a detailed breakdown of all tasks required to implement t
 **Estimated Time**: 1 hour
 
 **Actions**:
-- [ ] Implement parse() method using csv-parser
-- [ ] Implement generate() method using csv-writer
-- [ ] Handle CSV with BOM
-- [ ] Handle different line endings
-- [ ] Validate CSV headers
+- [x] Implement parse() method using csv-parser
+- [x] Implement generate() method using csv-writer
+- [x] Handle CSV with BOM
+- [x] Handle different line endings
+- [x] Validate CSV headers
 
 **Acceptance Criteria**:
 - CSV parsing works correctly
