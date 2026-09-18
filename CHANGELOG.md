@@ -42,6 +42,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed frontend API port mismatch (`.env.local`: `1459` → `1457`) to match backend
 - Corrected hardcoded API fallback in `products-page.tsx` (`4081` → `1457/api/v1`)
 - Fixed root `.env` port (`1459` → `1457`) and removed duplicate `NEXT_PUBLIC_API_URL`
+- Added auth token to product API requests in `products-page.tsx` to fix 401 errors
+- Made `tenant_id` nullable in `TenantEntity` to fix schema sync on existing SQLite data
+- Fixed sqljs persistence in `data-source.ts` by adding `autoSave` and `location` config
+- Replaced invalid bcrypt hash in seed script with valid hash for `admin123`
+- Removed duplicate JSON object in `apps/frontend/tsconfig.json`
 
 ## [0.3.0] - 2026-09-08
 
