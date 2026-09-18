@@ -18,13 +18,13 @@ export default function LoginForm() {
   const router = useRouter();
   const { login, setLoading, setError, clearError } = useAuthStore();
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setLocalError] = useState<string | null>(null);
 
   const handleSubmit = async (data: LoginFormData) => {
     try {
       setIsLoading(true);
       clearError();
-      setError(null);
+      setLocalError(null);
 
       const response = await authApi.login(data);
       
@@ -38,8 +38,7 @@ export default function LoginForm() {
       router.refresh();
     } catch (err: any) {
       const errorMessage = err?.response?.data?.message || err?.message || 'Login failed. Please try again.';
-      setError(errorMessage);
-      setError(errorMessage);
+      setLocalError(errorMessage);
     } finally {
       setIsLoading(false);
     }
