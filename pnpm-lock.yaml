@@ -87,6 +87,12 @@ importers:
       supertest:
         specifier: ^7.0.0
         version: 7.2.2
+      ts-node:
+        specifier: ^10.9.2
+        version: 10.9.2(@types/node@24.13.4)(typescript@6.0.3)
+      tsconfig-paths:
+        specifier: ^4.2.0
+        version: 4.2.0
       typescript:
         specifier: ^6.0.2
         version: 6.0.3
@@ -253,6 +259,9 @@ importers:
       ts-node:
         specifier: ^10.9.2
         version: 10.9.2(@types/node@24.13.4)(typescript@6.0.3)
+      tsconfig-paths:
+        specifier: ^4.2.0
+        version: 4.2.0
       tsconfig-paths-webpack-plugin:
         specifier: ^4.2.0
         version: 4.2.0
