@@ -1,3 +1,5 @@
+/// <reference types="node" />
+
 import { DataSource } from 'typeorm';
 import dotenv from 'dotenv';
 import * as fs from 'fs';
