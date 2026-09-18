@@ -20,7 +20,7 @@ import {
 } from "@radix-ui/react-alert-dialog";
 import { Toast, ToastProvider, ToastViewport } from "@radix-ui/react-toast";
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4081";
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:1457/api/v1";
 
 type Product = {
   id: number;

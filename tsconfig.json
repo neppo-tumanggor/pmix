@@ -1,44 +1,19 @@
 {
   "compilerOptions": {
-    "baseUrl": ".",
     "target": "ES2023",
-    "module": "nodenext",
-    "moduleResolution": "nodenext",
+    "module": "commonjs",
+    "moduleResolution": "node",
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "strict": true,
     "strictPropertyInitialization": false,
     "noEmit": true,
     "declaration": true,
-    "declarationMap": true,
     "sourceMap": true,
     "skipLibCheck": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "forceConsistentCasingInFileNames": true,
-    "ignoreDeprecations": "6.0",
-    "lib": [
-      "ES2023",
-      "DOM",
-      "DOM.Iterable"
-    ],
-    "paths": {
-      "@pmix/backend/*": [
-        "apps/backend/src/*"
-      ],
-      "@pmix/frontend/*": [
-        "apps/frontend/src/*"
-      ],
-      "@pmix/shared-types": [
-        "packages/shared-types/src"
-      ],
-      "@pmix/shared-ui": [
-        "packages/shared-ui/src"
-      ],
-      "@pmix/shared-utils": [
-        "packages/shared-utils/src"
-      ]
-    },
-  
+    "ignoreDeprecations": "6.0"
   }
 }

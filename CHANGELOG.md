@@ -38,6 +38,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Database now persists data across server restarts using sqljs with auto-save configuration
 - Added `location` parameter to sqljs driver for proper file-based persistence
 - Enabled `synchronize: true` for automatic table creation in development
+- Created missing root `tsconfig.json` to fix frontend `extends` resolution error
+- Fixed frontend API port mismatch (`.env.local`: `1459` → `1457`) to match backend
+- Corrected hardcoded API fallback in `products-page.tsx` (`4081` → `1457/api/v1`)
+- Fixed root `.env` port (`1459` → `1457`) and removed duplicate `NEXT_PUBLIC_API_URL`
 
 ## [0.3.0] - 2026-09-08
 
