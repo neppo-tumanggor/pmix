@@ -1,13 +1,20 @@
 import { create } from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
+import { User } from '@/lib/types/auth';
 
 // Auth Store
 interface AuthState {
-  user: any | null;
+  user: User | null;
   token: string | null;
+  refreshToken: string | null;
   isAuthenticated: boolean;
-  login: (user: any, token: string) => void;
+  isLoading: boolean;
+  error: string | null;
+  login: (user: User, token: string, refreshToken: string) => void;
   logout: () => void;
+  setLoading: (loading: boolean) => void;
+  setError: (error: string | null) => void;
+  clearError: () => void;
 }
 
 export const useAuthStore = create<AuthState>()(
@@ -16,14 +23,43 @@ export const useAuthStore = create<AuthState>()(
       (set) => ({
         user: null,
         token: null,
+        refreshToken: null,
         isAuthenticated: false,
-        login: (user, token) =>
-          set({ user, token, isAuthenticated: true }),
+        isLoading: false,
+        error: null,
+        login: (user, token, refreshToken) =>
+          set({ 
+            user, 
+            token, 
+            refreshToken,
+            isAuthenticated: true, 
+            isLoading: false, 
+            error: null 
+          }),
         logout: () =>
-          set({ user: null, token: null, isAuthenticated: false }),
+          set({ 
+            user: null, 
+            token: null, 
+            refreshToken: null,
+            isAuthenticated: false, 
+            isLoading: false,
+            error: null 
+          }),
+        setLoading: (loading) =>
+          set({ isLoading: loading }),
+        setError: (error) =>
+          set({ error, isLoading: false }),
+        clearError: () =>
+          set({ error: null }),
       }),
       {
         name: 'auth-storage',
+        partialize: (state) => ({
+          user: state.user,
+          token: state.token,
+          refreshToken: state.refreshToken,
+          isAuthenticated: state.isAuthenticated,
+        }),
       }
     )
   )
@@ -37,22 +73,13 @@ interface UIState {
   setTheme: (theme: 'light' | 'dark') => void;
 }
 
-export const useUIStore = create<UIState>()(
-  devtools(
-    persist(
-      (set) => ({
-        sidebarOpen: true,
-        theme: 'light',
-        toggleSidebar: () =>
-          set((state) => ({ sidebarOpen: !state.sidebarOpen })),
-        setTheme: (theme) => set({ theme }),
-      }),
-      {
-        name: 'ui-storage',
-      }
-    )
-  )
-);
+export const useUIStore = create<UIState>((set) => ({
+  sidebarOpen: true,
+  theme: 'light',
+  toggleSidebar: () =>
+    set((state) => ({ sidebarOpen: !state.sidebarOpen })),
+  setTheme: (theme) => set({ theme }),
+}));
 
 // Product Store
 interface ProductState {
@@ -61,7 +88,7 @@ interface ProductState {
   loading: boolean;
   error: string | null;
   setProducts: (products: any[]) => void;
-  setSelectedProduct: (product: any | null) => void;
+  setSelectedProduct: (selectedProduct: any | null) => void;
   setLoading: (loading: boolean) => void;
   setError: (error: string | null) => void;
 }
