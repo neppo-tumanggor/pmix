@@ -15,7 +15,6 @@ import { TenantGuard } from '../../auth/guards/tenant.guard';
 import { TenantId } from '../../auth/decorators/tenant-id.decorator';
 import { Product } from './entities/product.entity';
 import { ProductCategory } from './entities/product-category.entity';
-import { ProductCategory } from './entities/product-category.entity';
 
 @ApiTags('Products')
 @Controller('products')
