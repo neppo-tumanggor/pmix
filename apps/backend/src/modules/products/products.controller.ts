@@ -130,7 +130,6 @@ export class ProductsController {
   export(@Param('tenantId') tenantId: string) {
     return this.productsService.export(tenantId);
   }
-}
 
   // Category endpoints
   @Get('categories')
