@@ -22,6 +22,24 @@ import { Toast, ToastProvider, ToastViewport } from "@radix-ui/react-toast";
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:1457/api/v1";
 
+const getAuthHeaders = (): Record<string, string> => {
+  const headers: Record<string, string> = {
+    'Content-Type': 'application/json',
+  };
+  const token = localStorage.getItem('auth-storage');
+  if (token) {
+    try {
+      const authData = JSON.parse(token);
+      if (authData.state?.token) {
+        headers['Authorization'] = `Bearer ${authData.state.token}`;
+      }
+    } catch (error) {
+      console.error('Error parsing auth token:', error);
+    }
+  }
+  return headers;
+};
+
 type Product = {
   id: number;
   name: string;
@@ -70,7 +88,9 @@ export default function ProductsPage() {
 
   const fetchProducts = async () => {
     try {
-      const res = await fetch(`${API_BASE}/api/v1/products`);
+      const res = await fetch(`${API_BASE}/api/v1/products`, {
+        headers: getAuthHeaders(),
+      });
       if (!res.ok) {
         throw new Error(`HTTP ${res.status}`);
       }
@@ -114,7 +134,7 @@ export default function ProductsPage() {
 
       const res = await fetch(url, {
         method,
-        headers: { "Content-Type": "application/json" },
+        headers: getAuthHeaders(),
         body: JSON.stringify({
           ...form,
           stock: Number(form.stock),
@@ -142,6 +162,7 @@ export default function ProductsPage() {
     try {
       const res = await fetch(`${API_BASE}/api/v1/products/${deleteId}`, {
         method: "DELETE",
+        headers: getAuthHeaders(),
       });
       if (!res.ok) throw new Error("Failed to delete product");
       setToast("Product berhasil dihapus");

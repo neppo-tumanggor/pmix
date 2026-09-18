@@ -37,7 +37,7 @@ async function main() {
     if (!user) {
       user = userRepository.create({
         email: 'admin@pmix.com',
-        password: '$2b$10$rQ8J8H8K8L8M8N8O8P8Q8ReO8s8t8u8v8w8x8y8z8A8B8C8D8E8F8G8H', // admin123
+        password: '$2b$10$gqXMt/McF5WwXOAf/hG5bOEOqZfrTjv9sg2bkg04.uMbyh91b2yTi', // admin123
         name: 'Admin User',
         role: UserRole.ADMIN,
         emailVerified: true,
@@ -47,7 +47,10 @@ async function main() {
       user = await userRepository.save(user);
       console.log(`✓ Created user: ${user.email} (${user.role})`);
     } else {
-      console.log(`✓ User already exists: ${user.email}`);
+      // Update password in case it was seeded with an invalid hash
+      user.password = '$2b$10$gqXMt/McF5WwXOAf/hG5bOEOqZfrTjv9sg2bkg04.uMbyh91b2yTi';
+      await userRepository.save(user);
+      console.log(`✓ Updated password for: ${user.email}`);
     }
 
     // Clear existing products for this tenant

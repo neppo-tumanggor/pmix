@@ -73,6 +73,11 @@ const AppDataSource = dbType === 'postgres'
     : new DataSource({
         type: 'sqljs',
         database: loadSqliteDatabase(process.env.DB_DATABASE || './data/pmix_dev.sqlite'),
+        autoSave: {
+          enabled: true,
+          interval: 5000,
+        },
+        location: process.env.DB_DATABASE || './data/pmix_dev.sqlite',
         entities,
         migrations: ['./dist/migrations/*.js'],
         synchronize: false,
