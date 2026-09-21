@@ -15,7 +15,7 @@
     "emitDecoratorMetadata": true,
     "forceConsistentCasingInFileNames": true,
     "ignoreDeprecations": "6.0",
-    "typeRoots": ["./node_modules/@types"],
+    "types": ["jest"],
     "outDir": "./dist",
     "rootDir": "./src",
     "paths": {
@@ -25,7 +25,10 @@
     }
   },
   "include": [
-    "**/*"
+    "src/**/*",
+    "!src/**/__tests__/**/*",
+    "!src/**/*.spec.ts",
+    "!src/**/*.e2e-spec.ts"
   ],
   "exclude": [
     "node_modules",

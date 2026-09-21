@@ -16,6 +16,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Sidebar width transitions between `w-64` (expanded) and `w-16` (collapsed)
 - Main content margin adjusts dynamically (`ml-64` ↔ `ml-16`) with smooth transition
 
+### Fixed
+- Removed redundant root `tsconfig.json` to resolve TypeScript compilation errors
+- Backend TypeScript configuration no longer includes `rootDir` to allow `vitest.config.ts` inclusion
+- Fixed backend tsconfig include list so Vitest config files are excluded from the app TypeScript project
+- Added `types: ["jest"]` to backend tsconfig for proper test file type checking
+- Fixed sqljs DataSource `autoSave` configuration (changed from object to boolean)
+- Excluded test files from main type-check to reduce noise in IDE diagnostics
+
 ## [0.4.0] - 2026-09-21
 
 ### Added
