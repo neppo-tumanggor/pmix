@@ -5,11 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Modal, Textarea, TextInput, NumberInput, Checkbox, Group } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { Notifications, notifications } from '@mantine/notifications';
-import {
-  IconTrash,
-  IconPlus,
-  IconPencil,
-} from '@tabler/icons-react';
+import { Trash2, Plus, Pencil } from 'lucide-react';
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:1457/api/v1';
 
@@ -254,7 +250,7 @@ export default function ProductsPage() {
           onClick={openCreate}
           className="inline-flex items-center gap-2"
         >
-          <IconPlus className="w-4 h-4" />
+          <Plus className="w-4 h-4" />
           Add Product
         </Button>
       </div>
@@ -292,7 +288,7 @@ export default function ProductsPage() {
                     <td className="px-6 py-4 text-right">
                       <div className="flex items-center justify-end gap-2">
                         <button onClick={() => openEdit(product)} className="p-2 rounded-md hover:bg-sidebar-hover transition-colors">
-                          <IconPencil className="w-4 h-4 text-gray-600" stroke={1.5} />
+                          <Pencil className="w-4 h-4 text-gray-600" stroke={1.5} />
                         </button>
                         <Modal
                           opened={alertOpened && deleteId === product.id}
@@ -310,7 +306,7 @@ export default function ProductsPage() {
                           </Group>
                         </Modal>
                         <button onClick={() => { setDeleteId(product.id); alertHandlers.open(); }} className="p-2 rounded-md hover:bg-red-50 transition-colors">
-                          <IconTrash className="w-4 h-4 text-red-600" stroke={1.5} />
+                          <Trash2 className="w-4 h-4 text-red-600" stroke={1.5} />
                         </button>
                       </div>
                     </td>

@@ -2,20 +2,14 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import {
-  IconDashboard,
-  IconBox,
-  IconUser,
-  IconRocket,
-  IconSettings,
-} from '@tabler/icons-react';
+import { Home, Box, User, Rocket, Settings } from 'lucide-react';
 
 const menuItems = [
-  { name: 'Dashboard', href: '/', icon: IconDashboard },
-  { name: 'Products', href: '/products', icon: IconBox },
-  { name: 'Customers', href: '/customers', icon: IconUser },
-  { name: 'Campaigns', href: '/campaigns', icon: IconRocket },
-  { name: 'Settings', href: '/settings', icon: IconSettings },
+  { name: 'Dashboard', href: '/', icon: Home },
+  { name: 'Products', href: '/products', icon: Box },
+  { name: 'Customers', href: '/customers', icon: User },
+  { name: 'Campaigns', href: '/campaigns', icon: Rocket },
+  { name: 'Settings', href: '/settings', icon: Settings },
 ];
 
 export default function Sidebar() {
