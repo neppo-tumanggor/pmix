@@ -1,21 +1,21 @@
-"use client";
+'use client';
 
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import {
-  DashboardIcon,
-  CubeIcon,
-  PersonIcon,
-  RocketIcon,
-  GearIcon,
-} from "@radix-ui/react-icons";
+  IconDashboard,
+  IconBox,
+  IconUser,
+  IconRocket,
+  IconSettings,
+} from '@tabler/icons-react';
 
 const menuItems = [
-  { name: "Dashboard", href: "/", icon: DashboardIcon },
-  { name: "Products", href: "/products", icon: CubeIcon },
-  { name: "Customers", href: "/customers", icon: PersonIcon },
-  { name: "Campaigns", href: "/campaigns", icon: RocketIcon },
-  { name: "Settings", href: "/settings", icon: GearIcon },
+  { name: 'Dashboard', href: '/', icon: IconDashboard },
+  { name: 'Products', href: '/products', icon: IconBox },
+  { name: 'Customers', href: '/customers', icon: IconUser },
+  { name: 'Campaigns', href: '/campaigns', icon: IconRocket },
+  { name: 'Settings', href: '/settings', icon: IconSettings },
 ];
 
 export default function Sidebar() {
@@ -37,11 +37,11 @@ export default function Sidebar() {
               href={item.href}
               className={`flex items-center gap-3 px-3 py-2 rounded-md text-sm transition-colors ${
                 isActive
-                  ? "bg-sidebar-hover text-foreground font-medium"
-                  : "text-gray-600 hover:bg-sidebar-hover hover:text-foreground"
+                  ? 'bg-sidebar-hover text-foreground font-medium'
+                  : 'text-gray-600 hover:bg-sidebar-hover hover:text-foreground'
               }`}
             >
-              <Icon className="w-4 h-4" />
+              <Icon className="w-4 h-4" stroke={1.5} />
               {item.name}
             </Link>
           );

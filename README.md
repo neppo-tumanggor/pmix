@@ -201,11 +201,6 @@ pmix/
 �       �   +-- stores/    # State management
 �       �   +-- types/     # TypeScript types
 �
-+-- packages/
-�   +-- shared-types/      # Shared TypeScript types
-�   +-- shared-ui/         # Shared UI components
-�   +-- shared-utils/      # Shared utilities
-�
 +-- docs/                  # Documentation
 +-- tools/                 # Development tools
 +-- .github/               # CI/CD workflows
@@ -633,12 +628,9 @@ This project is private and confidential.
 - ? `.env` - SQLite default with new ports
 - ? `.env.example` - Template with SQLite default
 - ? `.gitignore` - Protects `.env` file
-- ? `data-source.ts` - SQLite primary, PostgreSQL fallback
 
 #### Documentation
-- ? `README.md` - Updated with SQLite-first approach
-- ? `DATABASE_SETUP.md` - Comprehensive setup guide
-- ? `SQLITE_SETUP.md` - Implementation summary
+- ? `README.md` - Main documentation with SQLite-first approach
 
 ### ?? Quick Reference
 

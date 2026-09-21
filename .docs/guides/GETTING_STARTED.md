@@ -89,10 +89,6 @@ pmix/
 ├── apps/
 │   ├── backend/           # NestJS API Server
 │   └── frontend/          # Next.js Web App
-├── packages/
-│   ├── shared-types/      # TypeScript interfaces
-│   ├── shared-ui/         # UI components
-│   └── shared-utils/      # Utilities
 ├── docs/                  # Documentation
 ├── tools/                 # Dev tools
 └── .github/               # CI/CD workflows
@@ -213,7 +209,7 @@ pnpm type-check
 ## 📖 Next Steps
 
 1. Read [System Architecture](./docs/architecture/system-architecture.md)
-2. Explore the [shared-types](./packages/shared-types/) package
+2. Explore the [frontend source](./apps/frontend/src/) package
 3. Check out existing [modules](./apps/backend/src/modules/)
 4. Review [API Documentation](./docs/api/) (coming soon)
 

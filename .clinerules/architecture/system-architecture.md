@@ -55,10 +55,10 @@ pmix adalah aplikasi Marketing Automation Platform yang dibangun menggunakan ars
 - **Testing**: Vitest
 
 ### Frontend
-- **Framework**: Next.js 14 (App Router)
+- **Framework**: Next.js 16 (App Router)
 - **Language**: TypeScript
 - **Styling**: Tailwind CSS v4
-- **UI Components**: Radix UI + shadcn/ui
+- **UI Components**: Mantine v7
 - **State Management**: Zustand
 - **Data Fetching**: TanStack Query (React Query)
 - **Forms**: React Hook Form + Zod
@@ -77,10 +77,6 @@ pmix/
 ├── apps/
 │   ├── backend/          # NestJS API
 │   └── frontend/         # Next.js Web App
-├── packages/
-│   ├── shared-types/     # TypeScript interfaces
-│   ├── shared-ui/        # Shared UI components
-│   └── shared-utils/     # Utility functions
 ├── tools/                # Dev tools & generators
 └── docs/                 # Documentation
 ```
@@ -111,7 +107,7 @@ pmix/
 
 2. **Compound Components**
    - Flexible UI composition
-   - Radix UI primitives
+   - Mantine components
 
 3. **Custom Hooks**
    - Reusable logic extraction

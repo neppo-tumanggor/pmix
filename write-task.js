@@ -1,1 +1,0 @@
-const fs=require('fs');const p='.docs/.module/products-module/spec-products-module/task-products.md';const content=fs.readFileSync(p,'utf8');fs.writeFileSync(p, content);console.log('read ok', content.length);

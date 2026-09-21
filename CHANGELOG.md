@@ -7,14 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.4.0] - 2026-09-21
+
 ### Added
-- `tools/scripts/pmix.cjs` � Cross-platform CLI for managing the PMIX lifecycle.
-- `pmix dev` � Start development environment (backend + frontend with hot reload).
-- `pmix build` � Build backend and frontend for production.
-- `pmix start` � Start production environment (compiled backend + next start).
-- `pmix stop` � Stop current environment.
-- `pmix restart` � Restart current environment (preserves runtime mode).
-- `pmix status` � Show service status and runtime mode.
+- `tools/scripts/pmix.cjs` — Cross-platform CLI for managing the PMIX lifecycle.
+- `pmix dev` — Start development environment (backend + frontend with hot reload).
+- `pmix build` — Build backend and frontend for production.
+- `pmix start` — Start production environment (compiled backend + next start).
+- `pmix stop` — Stop current environment.
+- `pmix restart` — Restart current environment (preserves runtime mode).
+- `pmix status` — Show service status and runtime mode.
 - `.pmix-processes.json` state tracking with runtime mode (development/production).
 - Process tree killing on Windows (`taskkill /T`) and Unix (process group `SIGTERM`/`SIGKILL`).
 - Idempotent `stop` and duplicate-start prevention.
@@ -24,11 +26,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Separated development (`pmix dev`) and production (`pmix start`) runtime semantics.
 - Updated README with clear dev/prod sections and consistent commands.
-- 
 - Simplified CLI - use pmix directly.
 - Fixed TypeScript build for production.
 - Backend now outputs .js files.
 - Production build works correctly.
+- Migrated frontend UI from Radix UI primitives to Mantine v7 (`@mantine/core`, `@mantine/hooks`, `@mantine/notifications`).
+- Replaced Radix icons with Tabler Icons (`@tabler/icons-react`).
 
 ### Fixed
 - Fixed database persistence issue by enabling sqljs auto-save with 5-second interval
@@ -107,4 +110,3 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Role-based access control (Admin, Manager, User)
 - Password history tracking
 - Session management
-

@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { MantineProvider } from "@mantine/core";
+import { Notifications } from "@mantine/notifications";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -31,7 +33,10 @@ export default function RootLayout({
         className="min-h-full flex bg-background text-foreground"
         suppressHydrationWarning
       >
-        {children}
+        <MantineProvider>
+          {children}
+          <Notifications position="bottom-right" />
+        </MantineProvider>
       </body>
     </html>
   );
