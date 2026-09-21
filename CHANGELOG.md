@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- Collapsible sidebar with toggle button (`PanelLeftClose` / `PanelLeftOpen`) in the header
+- Hover-expand behavior: collapsed sidebar shows labels and logo temporarily on hover
+- Tooltip on navigation items when sidebar is collapsed
+
+### Changed
+- Sidebar width transitions between `w-64` (expanded) and `w-16` (collapsed)
+- Main content margin adjusts dynamically (`ml-64` ↔ `ml-16`) with smooth transition
+
 ## [0.4.0] - 2026-09-21
 
 ### Added
