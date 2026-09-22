@@ -41,9 +41,9 @@ export default function Sidebar() {
           aria-label={isCollapsed ? 'Open sidebar' : 'Close sidebar'}
         >
           {isCollapsed ? (
-            <PanelLeftOpen className="w-5 h-5" stroke={1.5} />
+            <PanelLeftOpen className="w-5 h-5" stroke="1.5" />
           ) : (
-            <PanelLeftClose className="w-5 h-5" stroke={1.5} />
+            <PanelLeftClose className="w-5 h-5" stroke="1.5" />
           )}
         </button>
       </div>
@@ -63,7 +63,7 @@ export default function Sidebar() {
               }`}
               title={isCollapsed ? item.name : undefined}
             >
-              <Icon className="w-4 h-4 flex-shrink-0" stroke={1.5} />
+              <Icon className="w-4 h-4 flex-shrink-0" stroke="1.5" />
               {showLabels && <span className="whitespace-nowrap">{item.name}</span>}
             </Link>
           );

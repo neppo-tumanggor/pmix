@@ -13,17 +13,25 @@ const getAuthHeaders = (): Record<string, string> => {
   const headers: Record<string, string> = {
     'Content-Type': 'application/json',
   };
-  const token = localStorage.getItem('auth-storage');
-  if (token) {
-    try {
-      const authData = JSON.parse(token);
-      if (authData.state?.token) {
-        headers['Authorization'] = `Bearer ${authData.state.token}`;
-      }
-    } catch (error) {
-      console.error('Error parsing auth token:', error);
-    }
+
+  if (typeof window === 'undefined') {
+    return headers;
   }
+
+  try {
+    const raw = localStorage.getItem('auth-storage');
+    if (!raw) {
+      return headers;
+    }
+    const authData = JSON.parse(raw);
+    const token = authData?.state?.token ?? authData?.token;
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`;
+    }
+  } catch (error) {
+    console.error('Error parsing auth token:', error);
+  }
+
   return headers;
 };
 
@@ -76,14 +84,14 @@ export default function ProductsPage() {
 
   const fetchProducts = async () => {
     try {
-      const res = await fetch(`${API_BASE}/api/v1/products`, {
+      const res = await fetch(`${API_BASE}/products`, {
         headers: getAuthHeaders(),
       });
       if (!res.ok) {
         throw new Error(`HTTP ${res.status}`);
       }
-      const data = (await res.json()) as Product[] | { value: Product[] };
-      setProducts(Array.isArray(data) ? data : data.value || []);
+      const data = (await res.json()) as Product[] | { products: Product[]; total: number } | { value: Product[] };
+      setProducts(Array.isArray(data) ? data : (data as any).products || (data as any).value || []);
     } catch (error) {
       console.error('Failed to fetch products:', error);
       notifications.show({
@@ -120,8 +128,8 @@ export default function ProductsPage() {
     e.preventDefault();
     try {
       const url = editing
-        ? `${API_BASE}/api/v1/products/${editing.id}`
-        : `${API_BASE}/api/v1/products`;
+        ? `${API_BASE}/products/${editing.id}`
+        : `${API_BASE}/products`;
       const method = editing ? 'PATCH' : 'POST';
 
       const res = await fetch(url, {
@@ -156,7 +164,7 @@ export default function ProductsPage() {
   const handleDelete = async () => {
     if (!deleteId) return;
     try {
-      const res = await fetch(`${API_BASE}/api/v1/products/${deleteId}`, {
+      const res = await fetch(`${API_BASE}/products/${deleteId}`, {
         method: 'DELETE',
         headers: getAuthHeaders(),
       });
@@ -288,7 +296,7 @@ export default function ProductsPage() {
                     <td className="px-6 py-4 text-right">
                       <div className="flex items-center justify-end gap-2">
                         <button onClick={() => openEdit(product)} className="p-2 rounded-md hover:bg-sidebar-hover transition-colors">
-                          <Pencil className="w-4 h-4 text-gray-600" stroke={1.5} />
+                          <Pencil className="w-4 h-4 text-gray-600" stroke="1.5" />
                         </button>
                         <Modal
                           opened={alertOpened && deleteId === product.id}
@@ -306,7 +314,7 @@ export default function ProductsPage() {
                           </Group>
                         </Modal>
                         <button onClick={() => { setDeleteId(product.id); alertHandlers.open(); }} className="p-2 rounded-md hover:bg-red-50 transition-colors">
-                          <Trash2 className="w-4 h-4 text-red-600" stroke={1.5} />
+                          <Trash2 className="w-4 h-4 text-red-600" stroke="1.5" />
                         </button>
                       </div>
                     </td>

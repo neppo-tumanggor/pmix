@@ -15,7 +15,7 @@ export abstract class TenantEntity {
   updatedAt: Date;
 
   @DeleteDateColumn({ name: 'deleted_at', nullable: true })
-  deletedAt: Date;
+  deletedAt: Date | null;
 
   // Auto-generate UUID before insert
   @BeforeInsert()

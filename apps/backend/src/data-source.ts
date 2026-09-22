@@ -24,7 +24,7 @@ dotenv.config();
 
 // Set defaults if not set
 process.env.DB_TYPE = process.env.DB_TYPE || 'sqljs';
-process.env.DB_DATABASE = process.env.DB_DATABASE || './data/pmix_dev.sqlite';
+process.env.DB_DATABASE = process.env.DB_DATABASE || './pmix_dev';
 process.env.DB_LOGGING = process.env.DB_LOGGING || 'false';
 
 const dbType = process.env.DB_TYPE;

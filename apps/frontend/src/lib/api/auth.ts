@@ -10,22 +10,36 @@ const apiClient = axios.create({
   },
 });
 
+const getStoredAuthState = () => {
+  if (typeof window === 'undefined') {
+    return {} as { token?: string; refreshToken?: string };
+  }
+
+  const raw = localStorage.getItem('auth-storage');
+  if (!raw) {
+    return {} as { token?: string; refreshToken?: string };
+  }
+
+  try {
+    const authData = JSON.parse(raw);
+    return authData?.state ?? authData ?? {};
+  } catch (error) {
+    console.error('Error parsing auth token:', error);
+    return {} as { token?: string; refreshToken?: string };
+  }
+};
+
 // Add token to requests if available
 apiClient.interceptors.request.use(
   (config) => {
-    const token = typeof window !== 'undefined' ? localStorage.getItem('auth-storage') : null;
-    
+    const { token } = getStoredAuthState();
+
     if (token) {
-      try {
-        const authData = JSON.parse(token);
-        if (authData.state?.token) {
-          config.headers.Authorization = `Bearer ${authData.state.token}`;
-        }
-      } catch (error) {
-        console.error('Error parsing auth token:', error);
-      }
+      config.headers.Authorization = `Bearer ${token}`;
+    } else {
+      console.log('[auth interceptor] No token found in auth state');
     }
-    
+
     return config;
   },
   (error) => {
@@ -43,28 +57,30 @@ apiClient.interceptors.response.use(
       originalRequest._retry = true;
       
       try {
-        const token = typeof window !== 'undefined' ? localStorage.getItem('auth-storage') : null;
-        
-        if (token) {
-          const authData = JSON.parse(token);
-          const refreshToken = authData.state?.token; // In real app, store refreshToken separately
-          
-          if (refreshToken) {
-            const response = await axios.post<RefreshTokenResponse>(
-              `${API_BASE_URL}/auth/refresh`,
-              { refreshToken }
-            );
-            
-            const { accessToken } = response.data.data;
-            
-            // Update stored token
-            authData.state.token = accessToken;
-            localStorage.setItem('auth-storage', JSON.stringify(authData));
-            
-            // Retry original request
-            originalRequest.headers.Authorization = `Bearer ${accessToken}`;
-            return apiClient(originalRequest);
-          }
+        const authData = getStoredAuthState();
+        const refreshToken = authData.refreshToken;
+
+        if (refreshToken) {
+          const response = await axios.post<RefreshTokenResponse>(
+            `${API_BASE_URL}/auth/refresh`,
+            { refreshToken }
+          );
+
+          const { accessToken, refreshToken: newRefreshToken } = response.data.data;
+
+          // Update stored token
+          const nextAuthData = getStoredAuthState();
+          const merged = {
+            ...nextAuthData,
+            token: accessToken,
+            refreshToken: newRefreshToken,
+          };
+
+          localStorage.setItem('auth-storage', JSON.stringify({ state: merged }));
+
+          // Retry original request
+          originalRequest.headers.Authorization = `Bearer ${accessToken}`;
+          return apiClient(originalRequest);
         }
       } catch (refreshError) {
         // Refresh failed, redirect to login

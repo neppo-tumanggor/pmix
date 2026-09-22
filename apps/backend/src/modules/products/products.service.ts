@@ -1,8 +1,6 @@
 import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { IProductsRepository } from './interfaces/products.repository.interface';
-import { IProductCategoriesRepository } from './interfaces/product-categories.repository.interface';
+import { Repository, IsNull } from 'typeorm';
 import { Product } from './entities/product.entity';
 import { ProductCategory } from './entities/product-category.entity';
 import { CreateProductDto } from './dto/create-product.dto';
@@ -17,9 +15,9 @@ import { PRODUCT_CONSTANTS } from './constants/product.constants';
 export class ProductsService {
   constructor(
     @InjectRepository(Product)
-    private readonly productsRepository: IProductsRepository,
+    private readonly productsRepository: Repository<Product>,
     @InjectRepository(ProductCategory)
-    private readonly categoriesRepository: IProductCategoriesRepository,
+    private readonly categoriesRepository: Repository<ProductCategory>,
   ) {}
 
   async create(tenantId: string, createProductDto: CreateProductDto): Promise<Product> {
@@ -37,25 +35,55 @@ export class ProductsService {
     const page = query.page || PRODUCT_CONSTANTS.PAGE_SIZE;
     const limit = query.limit || PRODUCT_CONSTANTS.PAGE_SIZE;
 
-    return this.productsRepository.findAllWithFilters({
-      tenantId,
-      search: query.search,
-      category: query.category,
-      isActive: query.isActive,
-      minPrice: query.minPrice,
-      maxPrice: query.maxPrice,
-      minStock: query.minStock,
-      maxStock: query.maxStock,
-      sortBy: query.sortBy,
-      sortOrder: query.sortOrder,
-      page,
-      limit,
-    });
+    const qb = this.productsRepository
+      .createQueryBuilder('product')
+      .where('product.tenantId = :tenantId', { tenantId })
+      .andWhere('product.deletedAt IS NULL');
+
+    if (query.search) {
+      qb.andWhere('product.name ILIKE :search', { search: `%${query.search}%` });
+    }
+
+    if (query.category) {
+      qb.andWhere('product.category = :category', { category: query.category });
+    }
+
+    if (query.isActive !== undefined) {
+      qb.andWhere('product.isActive = :isActive', { isActive: query.isActive });
+    }
+
+    if (query.minPrice !== undefined) {
+      qb.andWhere('product.price >= :minPrice', { minPrice: query.minPrice });
+    }
+
+    if (query.maxPrice !== undefined) {
+      qb.andWhere('product.price <= :maxPrice', { maxPrice: query.maxPrice });
+    }
+
+    if (query.minStock !== undefined) {
+      qb.andWhere('product.stock >= :minStock', { minStock: query.minStock });
+    }
+
+    if (query.maxStock !== undefined) {
+      qb.andWhere('product.stock <= :maxStock', { maxStock: query.maxStock });
+    }
+
+    const total = await qb.getCount();
+
+    qb.orderBy(`product.${query.sortBy || 'createdAt'}`, query.sortOrder || 'DESC');
+    qb.offset((page - 1) * limit);
+    qb.limit(limit);
+
+    const products = await qb.getMany();
+
+    return { products, total };
   }
 
   async findOne(tenantId: string, id: string): Promise<Product> {
-    const product = await this.productsRepository.findByIdAndTenant(id, tenantId);
-    
+    const product = await this.productsRepository.findOne({
+      where: { id, tenantId, deletedAt: IsNull() },
+    });
+
     if (!product) {
       throw new NotFoundException({
         code: ProductErrorCodes.PRODUCT_NOT_FOUND,
@@ -65,9 +93,10 @@ export class ProductsService {
 
     return product;
   }
+
   async update(tenantId: string, id: string, updateProductDto: UpdateProductDto): Promise<Product> {
     const product = await this.findOne(tenantId, id);
-    
+
     Object.assign(product, updateProductDto);
     return this.productsRepository.save(product);
   }
@@ -78,8 +107,10 @@ export class ProductsService {
   }
 
   async restore(tenantId: string, id: string): Promise<Product> {
-    const product = await this.productsRepository.findByIdAndTenant(id, tenantId);
-    
+    const product = await this.productsRepository.findOne({
+      where: { id, tenantId },
+    });
+
     if (!product) {
       throw new NotFoundException({
         code: ProductErrorCodes.PRODUCT_NOT_FOUND,
@@ -87,7 +118,7 @@ export class ProductsService {
       });
     }
 
-    await this.productsRepository.restore(product.id);
+    await this.productsRepository.update(id, { deletedAt: null });
     return product;
   }
 
@@ -100,7 +131,7 @@ export class ProductsService {
 
     for (const productData of products) {
       try {
-        await this.productsRepository.create({
+        await this.productsRepository.save({
           ...productData,
           tenantId,
         });
@@ -109,7 +140,7 @@ export class ProductsService {
         result.failed++;
         result.errors.push({
           data: productData,
-          error: error.message,
+          error: error instanceof Error ? error.message : 'Unknown error',
         });
       }
     }
@@ -118,23 +149,26 @@ export class ProductsService {
   }
 
   async export(tenantId: string): Promise<Product[]> {
-    const { products } = await this.productsRepository.findAllWithFilters({
-      tenantId,
-      limit: 10000,
-    });
+    const qb = this.productsRepository
+      .createQueryBuilder('product')
+      .where('product.tenantId = :tenantId', { tenantId })
+      .andWhere('product.deletedAt IS NULL');
 
-    return products;
+    return qb.getMany();
   }
+
   // Category methods
   async getCategories(tenantId: string): Promise<ProductCategory[]> {
-    return this.categoriesRepository.findByTenant(tenantId);
+    return this.categoriesRepository.find({
+      where: { tenantId, deletedAt: IsNull() },
+      order: { name: 'ASC' },
+    });
   }
 
   async createCategory(tenantId: string, createCategoryDto: CreateCategoryDto): Promise<ProductCategory> {
-    const existingCategory = await this.categoriesRepository.findByNameAndTenant(
-      createCategoryDto.name,
-      tenantId,
-    );
+    const existingCategory = await this.categoriesRepository.findOne({
+      where: { name: createCategoryDto.name, tenantId, deletedAt: IsNull() },
+    });
 
     if (existingCategory) {
       throw new BadRequestException({
@@ -152,7 +186,9 @@ export class ProductsService {
   }
 
   async updateCategory(tenantId: string, id: string, updateCategoryDto: UpdateCategoryDto): Promise<ProductCategory> {
-    const category = await this.categoriesRepository.findByIdAndTenant(id, tenantId);
+    const category = await this.categoriesRepository.findOne({
+      where: { id, tenantId, deletedAt: IsNull() },
+    });
 
     if (!category) {
       throw new NotFoundException({
@@ -161,18 +197,15 @@ export class ProductsService {
       });
     }
 
-    if (updateCategoryDto.name && updateCategoryDto.name !== category.name) {
-      const existingCategory = await this.categoriesRepository.findByNameAndTenant(
-        updateCategoryDto.name,
-        tenantId,
-      );
+    const existingCategory = await this.categoriesRepository.findOne({
+      where: { name: updateCategoryDto.name, tenantId, deletedAt: IsNull() },
+    });
 
-      if (existingCategory) {
-        throw new BadRequestException({
-          code: ProductErrorCodes.CATEGORY_ALREADY_EXISTS,
-          message: 'Category with this name already exists',
-        });
-      }
+    if (existingCategory && existingCategory.id !== id) {
+      throw new BadRequestException({
+        code: ProductErrorCodes.CATEGORY_ALREADY_EXISTS,
+        message: 'Category with this name already exists',
+      });
     }
 
     Object.assign(category, updateCategoryDto);
@@ -180,7 +213,9 @@ export class ProductsService {
   }
 
   async deleteCategory(tenantId: string, id: string): Promise<void> {
-    const category = await this.categoriesRepository.findByIdAndTenant(id, tenantId);
+    const category = await this.categoriesRepository.findOne({
+      where: { id, tenantId, deletedAt: IsNull() },
+    });
 
     if (!category) {
       throw new NotFoundException({
@@ -189,7 +224,11 @@ export class ProductsService {
       });
     }
 
-    const hasProducts = await this.categoriesRepository.hasProducts(id);
+    const hasProducts = await this.productsRepository
+      .createQueryBuilder('product')
+      .where('product.categoryId = :categoryId', { categoryId: id })
+      .andWhere('product.deletedAt IS NULL')
+      .getCount();
     if (hasProducts) {
       throw new BadRequestException({
         code: ProductErrorCodes.CATEGORY_HAS_PRODUCTS,

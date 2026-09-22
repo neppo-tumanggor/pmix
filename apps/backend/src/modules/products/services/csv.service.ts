@@ -1,5 +1,5 @@
 import { Injectable, BadRequestException } from '@nestjs/common';
-import * as csvParser from 'csv-parser';
+import csvParser from 'csv-parser';
 import { createObjectCsvStringifier } from 'csv-writer';
 import { ReadStream } from 'fs';
 
@@ -29,7 +29,7 @@ export class CsvService {
           } catch (error) {
             errors.push({
               row: results.length + 1,
-              error: error.message,
+              error: error instanceof Error ? error.message : 'Unknown error',
             });
           }
         })
@@ -46,25 +46,25 @@ export class CsvService {
         .on('error', (error) => {
           reject(new BadRequestException({
             message: 'Invalid CSV file',
-            error: error.message,
+            error: error instanceof Error ? error.message : 'Unknown error',
           }));
         });
     });
   }
 
-  generate<T>(data: T[], headers: { header: string; key: keyof T }[]): string {
+  generate<T>(data: T[], headers: { title: string; id: keyof T }[]): string {
     const records = data.map((item) => {
       const row: any = {};
       headers.forEach((header) => {
-        row[header.header] = item[header.key] ?? '';
+        row[header.id as string] = item[header.id] ?? '';
       });
       return row;
     });
 
     const csvStringifier = createObjectCsvStringifier({
-      headers: headers.map((h) => ({
-        header: h.header,
-        key: h.header.toLowerCase().replace(/\s+/g, '_'),
+      header: headers.map((h) => ({
+        id: h.id as string,
+        title: h.title,
       })),
     });
 

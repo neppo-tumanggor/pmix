@@ -27,12 +27,12 @@ export default function LoginForm() {
       setLocalError(null);
 
       const response = await authApi.login(data);
-      
+
       const { accessToken, refreshToken, user } = response.data;
-      
-      // Store in Zustand
+
+      // Store in Zustand (persist middleware handles localStorage)
       login(user, accessToken, refreshToken);
-      
+
       // Redirect to products page
       router.push('/products');
       router.refresh();
