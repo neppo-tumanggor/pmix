@@ -6,34 +6,7 @@ import { Modal, Textarea, TextInput, NumberInput, Checkbox, Group } from '@manti
 import { useDisclosure } from '@mantine/hooks';
 import { Notifications, notifications } from '@mantine/notifications';
 import { Trash2, Plus, Pencil } from 'lucide-react';
-
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:1457/api/v1';
-
-const getAuthHeaders = (): Record<string, string> => {
-  const headers: Record<string, string> = {
-    'Content-Type': 'application/json',
-  };
-
-  if (typeof window === 'undefined') {
-    return headers;
-  }
-
-  try {
-    const raw = localStorage.getItem('auth-storage');
-    if (!raw) {
-      return headers;
-    }
-    const authData = JSON.parse(raw);
-    const token = authData?.state?.token ?? authData?.token;
-    if (token) {
-      headers['Authorization'] = `Bearer ${token}`;
-    }
-  } catch (error) {
-    console.error('Error parsing auth token:', error);
-  }
-
-  return headers;
-};
+import apiClient from '@/lib/api/auth';
 
 type Product = {
   id: number;
@@ -84,13 +57,8 @@ export default function ProductsPage() {
 
   const fetchProducts = async () => {
     try {
-      const res = await fetch(`${API_BASE}/products`, {
-        headers: getAuthHeaders(),
-      });
-      if (!res.ok) {
-        throw new Error(`HTTP ${res.status}`);
-      }
-      const data = (await res.json()) as Product[] | { products: Product[]; total: number } | { value: Product[] };
+      const response = await apiClient.get('/products');
+      const data = response.data as Product[] | { products: Product[]; total: number } | { value: Product[] };
       setProducts(Array.isArray(data) ? data : (data as any).products || (data as any).value || []);
     } catch (error) {
       console.error('Failed to fetch products:', error);
@@ -127,22 +95,17 @@ export default function ProductsPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const url = editing
-        ? `${API_BASE}/products/${editing.id}`
-        : `${API_BASE}/products`;
-      const method = editing ? 'PATCH' : 'POST';
+      const payload = {
+        ...form,
+        stock: Number(form.stock),
+        price: Number(form.price),
+      };
 
-      const res = await fetch(url, {
-        method,
-        headers: getAuthHeaders(),
-        body: JSON.stringify({
-          ...form,
-          stock: Number(form.stock),
-          price: Number(form.price),
-        }),
-      });
-
-      if (!res.ok) throw new Error('Failed to save product');
+      if (editing) {
+        await apiClient.patch(`/products/${editing.id}`, payload);
+      } else {
+        await apiClient.post('/products', payload);
+      }
 
       notifications.show({
         title: 'Success',
@@ -164,11 +127,7 @@ export default function ProductsPage() {
   const handleDelete = async () => {
     if (!deleteId) return;
     try {
-      const res = await fetch(`${API_BASE}/products/${deleteId}`, {
-        method: 'DELETE',
-        headers: getAuthHeaders(),
-      });
-      if (!res.ok) throw new Error('Failed to delete product');
+      await apiClient.delete(`/products/${deleteId}`);
       notifications.show({
         title: 'Success',
         message: 'Product berhasil dihapus',

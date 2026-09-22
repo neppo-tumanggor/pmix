@@ -8,22 +8,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
-- Collapsible sidebar with toggle button (`PanelLeftClose` / `PanelLeftOpen`) in the header
-- Hover-expand behavior: collapsed sidebar shows labels and logo temporarily on hover
-- Tooltip on navigation items when sidebar is collapsed
+- User popup menu in sidebar with **Profile** and **Logout** actions
+- New `/profile` page showing user details (name, email, role, verification status, last login)
+- Protected route coverage for the new profile page
 
 ### Changed
-- Sidebar width transitions between `w-64` (expanded) and `w-16` (collapsed)
-- Main content margin adjusts dynamically (`ml-64` ↔ `ml-16`) with smooth transition
+- Sidebar user area now uses an interactive popup menu instead of static user info
+- Products page now uses centralized `apiClient` for all API requests
 
 ### Fixed
-- Removed redundant root `tsconfig.json` to resolve TypeScript compilation errors
-- Backend TypeScript configuration no longer includes `rootDir` to allow `vitest.config.ts` inclusion
-- Fixed backend tsconfig include list so Vitest config files are excluded from the app TypeScript project
-- Added `types: ["jest"]` to backend tsconfig for proper test file type checking
-- Fixed sqljs DataSource `autoSave` configuration (changed from object to boolean)
-- Excluded test files from main type-check to reduce noise in IDE diagnostics
-
+- Backend `GET /auth/me` now returns plain profile data to avoid TypeORM serialization errors
+- Frontend `products-page.tsx` HTTP 401 issue by switching from manual `fetch()` to `apiClient`
 ## [0.4.0] - 2026-09-21
 
 ### Added
@@ -127,3 +122,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Role-based access control (Admin, Manager, User)
 - Password history tracking
 - Session management
+

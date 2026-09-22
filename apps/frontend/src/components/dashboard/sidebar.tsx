@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation';
 import { useState } from 'react';
 import { Home, Box, User, Rocket, Settings, PanelLeftClose, PanelLeftOpen } from 'lucide-react';
 import { useUIStore } from '@/stores';
+import UserMenu from './user-menu';
 
 const menuItems = [
   { name: 'Dashboard', href: '/', icon: Home },
@@ -71,17 +72,7 @@ export default function Sidebar() {
       </nav>
 
       <div className="p-4 border-t border-border">
-        <div className="flex items-center gap-3 px-3 py-2">
-          <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center flex-shrink-0">
-            <span className="text-xs font-medium text-gray-700">U</span>
-          </div>
-          {showLabels && (
-            <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium text-foreground truncate">User</p>
-              <p className="text-xs text-gray-500 truncate">user@example.com</p>
-            </div>
-          )}
-        </div>
+        <UserMenu />
       </div>
     </aside>
   );

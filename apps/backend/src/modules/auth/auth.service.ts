@@ -286,7 +286,8 @@ export class AuthService {
     if (!user || user.deletedAt) {
       throw new NotFoundException('User not found', AuthErrorCodes.USER_NOT_FOUND);
     }
-    const { password, emailVerificationToken, passwordResetToken, ...profile } = user;
+
+    const { password, emailVerificationToken, passwordResetToken, refreshTokens, sessions, passwordHistory, ...profile } = user as any;
     return profile as User;
   }
 
