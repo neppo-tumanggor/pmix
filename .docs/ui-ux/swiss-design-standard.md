@@ -8,6 +8,16 @@
 **Owner**: Head of Design  
 **Reference**: Swiss Design Movement (1950s-Present)
 
+### Frontend stylesheet setup
+
+The frontend uses Mantine components. `apps/frontend/src/app/layout.tsx` imports
+`@mantine/core/styles.css` and `@mantine/notifications/styles.css` before
+`./globals.css`. These imports are required for component layout and appearance;
+`MantineProvider` and the theme configuration alone do not load component CSS.
+Global styles import the design tokens from `src/styles/tokens.css`, while
+`src/theme/index.ts` configures Mantine. The PostCSS configuration has no custom
+plugins and does not require Tailwind.
+
 ---
 
 ## 📋 TABLE OF CONTENTS

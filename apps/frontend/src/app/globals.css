@@ -1,37 +1,90 @@
-@import "tailwindcss";
+/**
+ * PMIX Design System - Global Styles
+ * Swiss Design Standard 2026
+ * 
+ * Pure Mantine Implementation - No Tailwind
+ */
 
-:root {
-  --background: #ffffff;
-  --foreground: #1a1a1a;
-  --sidebar-bg: #f3f4f6;
-  --sidebar-hover: #e5e7eb;
-  --border: #e5e7eb;
+/* ============================================
+   DESIGN TOKENS
+   ============================================ */
+@import "../styles/tokens.css";
+
+/* ============================================
+   ESSENTIAL RESETS
+   ============================================ */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-sidebar: var(--sidebar-bg);
-  --color-sidebar-hover: var(--sidebar-hover);
-  --color-border: var(--border);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+  min-height: 100vh;
+  font-family: var(--font-sans);
+  color: var(--color-text-primary);
+  background-color: var(--color-bg-secondary);
 }
 
-/* Custom scrollbar for sidebar */
-.sidebar-scroll::-webkit-scrollbar {
-  width: 6px;
+#root {
+  min-height: 100vh;
 }
-.sidebar-scroll::-webkit-scrollbar-track {
-  background: transparent;
+
+/* ============================================
+   CUSTOM SCROLLBAR
+   ============================================ */
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
 }
-.sidebar-scroll::-webkit-scrollbar-thumb {
-  background-color: #d1d5db;
-  border-radius: 3px;
+
+::-webkit-scrollbar-track {
+  background: var(--color-bg-tertiary);
 }
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-gray-400);
+  border-radius: var(--radius-sm);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-gray-500);
+}
+
+/* ============================================
+   REDUCED MOTION
+   ============================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ============================================
+   PRINT STYLES
+   ============================================ */
+
+@media print {
+  body {
+    background: white;
+    color: black;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+

@@ -4,10 +4,9 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { loginSchema, type LoginFormData } from '@/lib/validations/auth';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+import { TextInput, PasswordInput } from '@mantine/core';
 
-interface LoginFormFieldsProps {
+export interface LoginFormFieldsProps {
   onSubmit: (data: LoginFormData) => Promise<void>;
   isLoading: boolean;
   error: string | null;
@@ -31,8 +30,8 @@ export default function LoginFormFields({ onSubmit, isLoading, error }: LoginFor
       )}
 
       <div className="space-y-2">
-        <Label htmlFor="email">Email</Label>
-        <Input
+        <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
+        <TextInput
           id="email"
           type="email"
           placeholder="admin@pmix.com"
@@ -44,11 +43,10 @@ export default function LoginFormFields({ onSubmit, isLoading, error }: LoginFor
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="password">Password</Label>
-        <Input
+        <label htmlFor="password" className="block text-sm font-medium text-gray-700">Password</label>
+        <PasswordInput
           id="password"
-          type="password"
-          placeholder="••••••••"
+          placeholder="��������"
           autoComplete="current-password"
           disabled={isLoading}
           error={errors.password?.message}
@@ -56,11 +54,7 @@ export default function LoginFormFields({ onSubmit, isLoading, error }: LoginFor
         />
       </div>
 
-      <Button
-        type="submit"
-        className="w-full"
-        disabled={isLoading}
-      >
+      <Button type="submit" disabled={isLoading}>
         {isLoading ? 'Signing in...' : 'Sign in'}
       </Button>
     </form>

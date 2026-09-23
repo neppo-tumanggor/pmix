@@ -11,14 +11,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - User popup menu in sidebar with **Profile** and **Logout** actions
 - New `/profile` page showing user details (name, email, role, verification status, last login)
 - Protected route coverage for the new profile page
+- Data-driven dashboard with business metrics, revenue visualization, recent activity, loading states, and API error handling
+- Responsive dashboard styles for desktop, tablet, and mobile layouts
+- Reusable design-system card styles with header, content, footer, and interactive states
 
 ### Changed
 - Sidebar user area now uses an interactive popup menu instead of static user info
 - Products page now uses centralized `apiClient` for all API requests
+- Dashboard now applies the existing Swiss design system for its grid, spacing, typography, colors, and cards
+- Dashboard sidebar now uses the Mantine application shell and supports the documented 256px and 64px widths
+- Frontend typography now uses Inter and the centralized Mantine theme configuration
 
 ### Fixed
 - Backend `GET /auth/me` now returns plain profile data to avoid TypeORM serialization errors
 - Frontend `products-page.tsx` HTTP 401 issue by switching from manual `fetch()` to `apiClient`
+- Restored Mantine component and notification styling by loading their required global stylesheets
+- Fixed the dashboard navigation target and active state to use `/dashboard`
+- Fixed collapsed desktop sidebar behavior so the compact navigation remains visible
+- Removed nested page containers that caused inconsistent dashboard alignment and spacing
+- Removed the obsolete Tailwind PostCSS plugin from the Mantine-only frontend configuration
+
 ## [0.4.0] - 2026-09-21
 
 ### Added

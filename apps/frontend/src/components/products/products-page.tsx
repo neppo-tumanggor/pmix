@@ -1,18 +1,22 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Button } from '@/components/ui/button';
-import { Modal, Textarea, TextInput, NumberInput, Checkbox, Group } from '@mantine/core';
+import { useRouter } from 'next/navigation';
+import { 
+  Container, Stack, Paper, Button, Modal, TextInput, Textarea, 
+  NumberInput, Checkbox, Group, Table, ActionIcon, Badge, LoadingOverlay, Text
+} from '@mantine/core';
+import { PageHeader } from '@/components/layout/page-header';
 import { useDisclosure } from '@mantine/hooks';
 import { Notifications, notifications } from '@mantine/notifications';
 import { Trash2, Plus, Pencil } from 'lucide-react';
 import apiClient from '@/lib/api/auth';
 
 type Product = {
-  id: number;
+  id: string;
   name: string;
   description?: string;
-  price: string;
+  price: number;
   category?: string;
   stock: number;
   imageUrl?: string;
@@ -42,11 +46,12 @@ const emptyForm: ProductFormData = {
 };
 
 export default function ProductsPage() {
+  const router = useRouter();
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [editing, setEditing] = useState<Product | null>(null);
   const [form, setForm] = useState<ProductFormData>(emptyForm);
-  const [deleteId, setDeleteId] = useState<number | null>(null);
+  const [deleteId, setDeleteId] = useState<string | null>(null);
 
   const [dialogOpened, dialogHandlers] = useDisclosure(false);
   const [alertOpened, alertHandlers] = useDisclosure(false);
@@ -57,9 +62,22 @@ export default function ProductsPage() {
 
   const fetchProducts = async () => {
     try {
+      setLoading(true);
       const response = await apiClient.get('/products');
-      const data = response.data as Product[] | { products: Product[]; total: number } | { value: Product[] };
-      setProducts(Array.isArray(data) ? data : (data as any).products || (data as any).value || []);
+      const data = response.data;
+      
+      let productsList: Product[] = [];
+      if (Array.isArray(data)) {
+        productsList = data;
+      } else if (data && typeof data === 'object') {
+        if (Array.isArray(data.products)) {
+          productsList = data.products;
+        } else if (Array.isArray(data.value)) {
+          productsList = data.value;
+        }
+      }
+      
+      setProducts(productsList);
     } catch (error) {
       console.error('Failed to fetch products:', error);
       notifications.show({
@@ -83,7 +101,7 @@ export default function ProductsPage() {
     setForm({
       name: product.name,
       description: product.description || '',
-      price: product.price,
+      price: String(product.price),
       category: product.category || '',
       stock: product.stock,
       imageUrl: product.imageUrl || '',
@@ -102,7 +120,7 @@ export default function ProductsPage() {
       };
 
       if (editing) {
-        await apiClient.patch(`/products/${editing.id}`, payload);
+        await apiClient.patch('/products/', payload);
       } else {
         await apiClient.post('/products', payload);
       }
@@ -148,142 +166,166 @@ export default function ProductsPage() {
   };
 
   return (
-    <div className="p-6">
-      <div className="flex items-center justify-between mb-6">
-        <div>
-          <h2 className="text-2xl font-semibold text-foreground">Products</h2>
-          <p className="text-sm text-gray-500 mt-1">
-            Kelola data product marketing Anda
-          </p>
-        </div>
-        <Modal
-          opened={dialogOpened}
-          onClose={dialogHandlers.close}
-          title={editing ? 'Edit Product' : 'Create Product'}
-          size="md"
-        >
-          <form onSubmit={handleSubmit}>
-            <div className="space-y-4">
-              <TextInput
-                label="Name"
-                required
-                value={form.name}
-                onChange={(e) => setForm({ ...form, name: e.currentTarget.value })}
-              />
-              <Textarea
-                label="Description"
-                value={form.description}
-                onChange={(e) => setForm({ ...form, description: e.currentTarget.value })}
-                rows={3}
-              />
-              <div className="grid grid-cols-2 gap-4">
-                <NumberInput
-                  label="Price"
-                  required
-                  decimalScale={2}
-                  value={form.price}
-                  onChange={(val) => setForm({ ...form, price: String(val || '') })}
-                />
-                <NumberInput
-                  label="Stock"
-                  required
-                  value={form.stock}
-                  onChange={(val) => setForm({ ...form, stock: Number(val || 0) })}
-                />
-              </div>
-              <TextInput
-                label="Category"
-                value={form.category}
-                onChange={(e) => setForm({ ...form, category: e.currentTarget.value })}
-              />
-              <TextInput
-                label="Image URL"
-                value={form.imageUrl}
-                onChange={(e) => setForm({ ...form, imageUrl: e.currentTarget.value })}
-              />
-              <Checkbox
-                label="Active"
-                checked={form.isActive}
-                onChange={(e) => setForm({ ...form, isActive: e.currentTarget.checked })}
-              />
-            </div>
-            <Group justify="flex-end" mt="md">
-              <Button variant="outline" type="button" onClick={dialogHandlers.close}>Cancel</Button>
-              <Button type="submit">{editing ? 'Update' : 'Create'}</Button>
-            </Group>
-          </form>
-        </Modal>
-        <Button
-          onClick={openCreate}
-          className="inline-flex items-center gap-2"
-        >
-          <Plus className="w-4 h-4" />
-          Add Product
-        </Button>
-      </div>
+    <Container size='xl' py='lg'>
+      <Stack gap='md'>
+        <PageHeader
+          title="Products"
+          description="Kelola data product marketing Anda"
+          action={
+            <Button onClick={openCreate} leftSection={<Plus size={16} />}>
+              Add Product
+            </Button>
+          }
+        />
 
-      <div className="bg-white border border-border rounded-lg overflow-hidden">
-        {loading ? (
-          <div className="p-6 text-center text-gray-500">Loading...</div>
-        ) : products.length === 0 ? (
-          <div className="p-6 text-center text-gray-500">No products found</div>
-        ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead>
-                <tr className="border-b border-border">
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Name</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Category</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Price</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Stock</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
-                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Actions</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-border">
-                {products.map((product) => (
-                  <tr key={product.id} className="hover:bg-sidebar">
-                    <td className="px-6 py-4 font-medium text-foreground">{product.name}</td>
-                    <td className="px-6 py-4 text-gray-600">{product.category || '-'}</td>
-                    <td className="px-6 py-4 text-gray-600">Rp {Number(product.price).toLocaleString('id-ID')}</td>
-                    <td className="px-6 py-4 text-gray-600">{product.stock}</td>
-                    <td className="px-6 py-4">
-                      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${product.isActive ? 'bg-green-50 text-green-700' : 'bg-gray-100 text-gray-600'}`}>
-                        {product.isActive ? 'Active' : 'Inactive'}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4 text-right">
-                      <div className="flex items-center justify-end gap-2">
-                        <button onClick={() => openEdit(product)} className="p-2 rounded-md hover:bg-sidebar-hover transition-colors">
-                          <Pencil className="w-4 h-4 text-gray-600" stroke="1.5" />
-                        </button>
-                        <Modal
-                          opened={alertOpened && deleteId === product.id}
-                          onClose={alertHandlers.close}
-                          title="Delete Product"
-                          size="sm"
-                          centered
+        <Paper shadow='sm' p='md' radius='md' withBorder pos='relative'>
+          <LoadingOverlay visible={loading} />
+          
+          {!loading && products.length === 0 ? (
+            <Text c='dimmed' ta='center' py='xl'>
+              No products found
+            </Text>
+          ) : (
+            <Table.ScrollContainer minWidth={800}>
+              <Table striped highlightOnHover>
+                <Table.Thead>
+                  <Table.Tr>
+                    <Table.Th>Name</Table.Th>
+                    <Table.Th>Category</Table.Th>
+                    <Table.Th>Price</Table.Th>
+                    <Table.Th>Stock</Table.Th>
+                    <Table.Th>Status</Table.Th>
+                    <Table.Th ta='right'>Actions</Table.Th>
+                  </Table.Tr>
+                </Table.Thead>
+                <Table.Tbody>
+                  {products.map((product) => (
+                    <Table.Tr key={product.id}>
+                      <Table.Td>
+                        <Button
+                          variant='subtle'
+                          color='blue'
+                          onClick={() => {
+                            router.push(`/products/${product.id}`)
+                          }}
+                          styles={{ root: { padding: 0, height: 'auto', fontWeight: 500 } }}
                         >
-                          <p className="text-sm text-gray-600 mb-4">
-                            Are you sure you want to delete this product? This action cannot be undone.
-                          </p>
-                          <Group justify="flex-end">
-                            <Button variant="outline" onClick={alertHandlers.close}>Cancel</Button>
-                            <Button variant="destructive" onClick={handleDelete}>Delete</Button>
-                          </Group>
-                        </Modal>
-                        <button onClick={() => { setDeleteId(product.id); alertHandlers.open(); }} className="p-2 rounded-md hover:bg-red-50 transition-colors">
-                          <Trash2 className="w-4 h-4 text-red-600" stroke="1.5" />
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
-      </div>
-    </div>
+                          {product.name}
+                        </Button>
+                      </Table.Td>
+                      <Table.Td>{product.category || '-'}</Table.Td>
+                      <Table.Td>Rp {Number(product.price).toLocaleString('id-ID')}</Table.Td>
+                      <Table.Td>{product.stock}</Table.Td>
+                      <Table.Td>
+                        <Badge color={product.isActive ? 'green' : 'gray'} variant='light'>
+                          {product.isActive ? 'Active' : 'Inactive'}
+                        </Badge>
+                      </Table.Td>
+                      <Table.Td>
+                        <Group gap='xs' justify='flex-end'>
+                          <ActionIcon
+                            variant='subtle'
+                            color='blue'
+                            onClick={() => openEdit(product)}
+                          >
+                            <Pencil size={16} />
+                          </ActionIcon>
+                          <ActionIcon
+                            variant='subtle'
+                            color='red'
+                            onClick={() => { setDeleteId(product.id); alertHandlers.open(); }}
+                          >
+                            <Trash2 size={16} />
+                          </ActionIcon>
+                        </Group>
+                      </Table.Td>
+                    </Table.Tr>
+                  ))}
+                </Table.Tbody>
+              </Table>
+            </Table.ScrollContainer>
+          )}
+        </Paper>
+      </Stack>
+
+      {/* Create/Edit Modal */}
+      <Modal
+        opened={dialogOpened}
+        onClose={dialogHandlers.close}
+        title={editing ? 'Edit Product' : 'Create Product'}
+        size='md'
+      >
+        <form onSubmit={handleSubmit}>
+          <Stack gap='md'>
+            <TextInput
+              label='Name'
+              required
+              value={form.name}
+              onChange={(e) => setForm({ ...form, name: e.currentTarget.value })}
+            />
+            <Textarea
+              label='Description'
+              value={form.description}
+              onChange={(e) => setForm({ ...form, description: e.currentTarget.value })}
+              rows={3}
+            />
+            <Group gap='md'>
+              <NumberInput
+                label='Price'
+                required
+                decimalScale={2}
+                prefix='Rp '
+                value={form.price}
+                onChange={(val) => setForm({ ...form, price: String(val || '') })}
+                style={{ flex: 1 }}
+              />
+              <NumberInput
+                label='Stock'
+                required
+                value={form.stock}
+                onChange={(val) => setForm({ ...form, stock: Number(val || 0) })}
+                style={{ flex: 1 }}
+              />
+            </Group>
+            <TextInput
+              label='Category'
+              value={form.category}
+              onChange={(e) => setForm({ ...form, category: e.currentTarget.value })}
+            />
+            <TextInput
+              label='Image URL'
+              value={form.imageUrl}
+              onChange={(e) => setForm({ ...form, imageUrl: e.currentTarget.value })}
+            />
+            <Checkbox
+              label='Active'
+              checked={form.isActive}
+              onChange={(e) => setForm({ ...form, isActive: e.currentTarget.checked })}
+            />
+          </Stack>
+          <Group justify='flex-end' mt='lg'>
+            <Button variant='outline' type='button' onClick={dialogHandlers.close}>Cancel</Button>
+            <Button type='submit'>{editing ? 'Update' : 'Create'}</Button>
+          </Group>
+        </form>
+      </Modal>
+
+      {/* Delete Confirmation Modal */}
+      <Modal
+        opened={alertOpened && deleteId !== null}
+        onClose={alertHandlers.close}
+        title='Delete Product'
+        size='sm'
+        centered
+      >
+        <Text size='sm' c='dimmed' mb='md'>
+          Are you sure you want to delete this product? This action cannot be undone.
+        </Text>
+        <Group justify='flex-end'>
+          <Button variant='outline' onClick={alertHandlers.close}>Cancel</Button>
+          <Button color='red' onClick={handleDelete}>Delete</Button>
+        </Group>
+      </Modal>
+    </Container>
   );
 }

@@ -1,7 +1,8 @@
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
+import { useState, useEffect } from 'react';
+import { Container, Title, Text, Stack, Paper, TextInput, Select, Checkbox, Button, Group, Alert } from '@mantine/core';
+import { PageHeader } from '@/components/layout/page-header';
 
 type Settings = {
   storeName: string;
@@ -41,108 +42,89 @@ export default function SettingsPage() {
   };
 
   const update = (patch: Partial<Settings>) =>
-    setSettings((prev) => ({ ...prev, ...patch }));
+    setSettings((prev: Settings) => ({ ...prev, ...patch }));
 
   return (
-    <div className="p-6 max-w-3xl">
-      <div className="mb-6">
-        <h1 className="text-2xl font-semibold text-foreground">Settings</h1>
-        <p className="text-sm text-gray-500 mt-1">
-          Manage general application settings
-        </p>
-      </div>
+    <Container size="md" py="lg">
+      <Stack gap="lg">
+        <PageHeader
+          title="Settings"
+          description="Manage general application settings"
+        />
 
-      <div className="bg-white border border-border rounded-lg divide-y divide-border">
-        <div className="p-6">
-          <h2 className="text-base font-semibold text-foreground">General</h2>
-          <p className="text-sm text-gray-500 mt-1">
-            Basic store information used across the dashboard.
-          </p>
-
-          <div className="mt-4 grid gap-4">
+        <Paper shadow="sm" p="lg" radius="md" withBorder>
+          <Stack gap="md">
             <div>
-              <label className="block text-sm font-medium text-foreground mb-1">
-                Store name
-              </label>
-              <input
-                type="text"
-                value={settings.storeName}
-                onChange={(e) => update({ storeName: e.currentTarget.value })}
-                className="w-full border border-border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gray-400"
-              />
+              <Title order={3} size="h4">General</Title>
+              <Text c="dimmed" size="sm" mt="xs">
+                Basic store information used across the dashboard.
+              </Text>
             </div>
 
-            <div>
-              <label className="block text-sm font-medium text-foreground mb-1">
-                Contact email
-              </label>
-              <input
+            <Stack gap="md">
+              <TextInput
+                label="Store name"
+                value={settings.storeName}
+                onChange={(e) => update({ storeName: e.currentTarget.value })}
+              />
+
+              <TextInput
+                label="Contact email"
                 type="email"
                 value={settings.email}
                 onChange={(e) => update({ email: e.currentTarget.value })}
-                className="w-full border border-border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gray-400"
               />
-            </div>
 
-            <div>
-              <label className="block text-sm font-medium text-foreground mb-1">
-                Currency
-              </label>
-              <select
+              <Select
+                label="Currency"
                 value={settings.currency}
-                onChange={(e) => update({ currency: e.currentTarget.value })}
-                className="w-full border border-border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gray-400 bg-white"
-              >
-                <option value="IDR">IDR</option>
-                <option value="USD">USD</option>
-                <option value="EUR">EUR</option>
-              </select>
+                onChange={(value) => update({ currency: value || 'IDR' })}
+                data={[
+                  { value: 'IDR', label: 'IDR' },
+                  { value: 'USD', label: 'USD' },
+                  { value: 'EUR', label: 'EUR' },
+                ]}
+              />
+            </Stack>
+          </Stack>
+        </Paper>
+
+        <Paper shadow="sm" p="lg" radius="md" withBorder>
+          <Stack gap="md">
+            <div>
+              <Title order={3} size="h4">Notifications</Title>
+              <Text c="dimmed" size="sm" mt="xs">
+                Choose what notifications you want to receive.
+              </Text>
             </div>
-          </div>
-        </div>
 
-        <div className="p-6">
-          <h2 className="text-base font-semibold text-foreground">Notifications</h2>
-          <p className="text-sm text-gray-500 mt-1">
-            Choose what notifications you want to receive.
-          </p>
-
-          <div className="mt-4 space-y-3">
-            <label className="flex items-center justify-between">
-              <span className="text-sm text-foreground">
-                Email notifications
-              </span>
-              <input
-                type="checkbox"
+            <Stack gap="sm">
+              <Checkbox
+                label="Email notifications"
                 checked={settings.notifyEmail}
                 onChange={(e) => update({ notifyEmail: e.currentTarget.checked })}
-                className="w-4 h-4 rounded border-gray-300"
               />
-            </label>
-            <label className="flex items-center justify-between">
-              <span className="text-sm text-foreground">
-                Product update alerts
-              </span>
-              <input
-                type="checkbox"
+              <Checkbox
+                label="Product update alerts"
                 checked={settings.notifyProduct}
                 onChange={(e) => update({ notifyProduct: e.currentTarget.checked })}
-                className="w-4 h-4 rounded border-gray-300"
               />
-            </label>
-          </div>
-        </div>
+            </Stack>
+          </Stack>
+        </Paper>
 
-        <div className="p-6 flex items-center justify-between">
-          <p className="text-sm text-gray-500">Settings are saved locally for now.</p>
-          <div className="flex items-center gap-3">
-            {saved && (
-              <span className="text-sm text-green-700">Saved</span>
-            )}
-            <Button onClick={handleSave}>Save settings</Button>
-          </div>
-        </div>
-      </div>
-    </div>
+        <Paper shadow="sm" p="lg" radius="md" withBorder>
+          <Group justify="space-between">
+            <Text size="sm" c="dimmed">Settings are saved locally for now.</Text>
+            <Group gap="sm">
+              {saved && (
+                <Alert color="green" variant="light" py="xs">Saved</Alert>
+              )}
+              <Button onClick={handleSave}>Save settings</Button>
+            </Group>
+          </Group>
+        </Paper>
+      </Stack>
+    </Container>
   );
 }

@@ -1,8 +1,8 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
-import { Avatar, Button, Group, Text } from '@mantine/core';
+import { Avatar, Button, Group, Text, Menu, UnstyledButton } from '@mantine/core';
 import { User, LogOut } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useAuthStore } from '@/stores';
 import { authApi } from '@/lib/api/auth';
@@ -11,8 +11,7 @@ import { notifications } from '@mantine/notifications';
 export default function UserMenu() {
   const router = useRouter();
   const { user, logout } = useAuthStore();
-  const [opened, setOpened] = useState(false);
-
+  
   if (!user) return null;
 
   const initials = user.name
@@ -42,52 +41,51 @@ export default function UserMenu() {
   };
 
   return (
-    <div className="relative">
-      <button
-        type="button"
-        className="flex items-center gap-3 px-3 py-2 w-full hover:bg-sidebar-hover rounded-md transition-colors text-left"
-        onClick={() => setOpened((v) => !v)}
-        aria-expanded={opened}
-      >
-        <Avatar size="sm" radius="xl" className="bg-gray-200 text-gray-700 flex-shrink-0">
-          {initials}
-        </Avatar>
-        <div className="flex-1 min-w-0">
-          <p className="text-sm font-medium text-foreground truncate">{user.name}</p>
-          <p className="text-xs text-gray-500 truncate">{user.email}</p>
-        </div>
-      </button>
-
-      {opened && (
-        <div
-          className="absolute right-4 bottom-full mb-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg z-50"
-          style={{ minWidth: 180 }}
+    <Menu shadow="md" width={200} position="top-end">
+      <Menu.Target>
+        <UnstyledButton
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '12px',
+            padding: '8px 12px',
+            width: '100%',
+            borderRadius: '6px',
+            transition: 'background-color 150ms ease-out',
+          }}
         >
-          <button
-            type="button"
-            className="w-full flex items-center gap-2 px-3 py-2 text-sm text-foreground hover:bg-gray-50 transition-colors"
-            onClick={() => {
-              setOpened(false);
-              router.push('/profile');
-            }}
-          >
-            <User size={16} className="text-gray-500" />
-            <span>Profile</span>
-          </button>
-          <div className="border-t border-gray-100" />
-          <button
-            type="button"
-            className="w-full flex items-center gap-2 px-3 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors"
-            onClick={() => {
-              setOpened(false);
-              handleLogout();
-            }}
-          >
-            <LogOut size={16} />
-            <span>Logout</span>
-          </button>
-        </div>
-      )}
-    </div>
+          <Avatar size="sm" radius="xl" color="blue">
+            {initials}
+          </Avatar>
+          {user && (
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <Text size="sm" fw={500} truncate>
+                {user.name}
+              </Text>
+              <Text size="xs" c="dimmed" truncate>
+                {user.email}
+              </Text>
+            </div>
+          )}
+        </UnstyledButton>
+      </Menu.Target>
+
+      <Menu.Dropdown>
+        <Menu.Item
+          leftSection={<User size={16} />}
+          onClick={() => router.push('/profile')}
+        >
+          Profile
+        </Menu.Item>
+        <Menu.Divider />
+        <Menu.Item
+          color="red"
+          leftSection={<LogOut size={16} />}
+          onClick={handleLogout}
+        >
+          Logout
+        </Menu.Item>
+      </Menu.Dropdown>
+    </Menu>
   );
 }

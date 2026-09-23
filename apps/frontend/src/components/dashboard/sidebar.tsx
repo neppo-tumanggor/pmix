@@ -1,15 +1,14 @@
 'use client';
 
-import Link from 'next/link';
+import { NavLink, Group, Text, ActionIcon, Stack, Divider, Box } from '@mantine/core';
 import { usePathname } from 'next/navigation';
-import { useState } from 'react';
-import { Home, Box, User, Rocket, Settings, PanelLeftClose, PanelLeftOpen } from 'lucide-react';
+import { Home, Box as BoxIcon, User, Rocket, Settings, PanelLeftClose, PanelLeftOpen } from 'lucide-react';
 import { useUIStore } from '@/stores';
 import UserMenu from './user-menu';
 
 const menuItems = [
-  { name: 'Dashboard', href: '/', icon: Home },
-  { name: 'Products', href: '/products', icon: Box },
+  { name: 'Dashboard', href: '/dashboard', icon: Home },
+  { name: 'Products', href: '/products', icon: BoxIcon },
   { name: 'Customers', href: '/customers', icon: User },
   { name: 'Campaigns', href: '/campaigns', icon: Rocket },
   { name: 'Settings', href: '/settings', icon: Settings },
@@ -19,61 +18,76 @@ export default function Sidebar() {
   const pathname = usePathname();
   const sidebarOpen = useUIStore((state) => state.sidebarOpen);
   const toggleSidebar = useUIStore((state) => state.toggleSidebar);
-  const [hovered, setHovered] = useState(false);
-
-  const isCollapsed = !sidebarOpen;
-  const showLabels = sidebarOpen || hovered;
-
   return (
-    <aside
-      className={`h-screen bg-sidebar border-r border-border flex flex-col fixed left-0 top-0 z-40 transition-all duration-300 ease-in-out ${
-        isCollapsed ? 'w-16' : 'w-64'
-      }`}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-    >
-      <div className="h-16 flex items-center justify-between px-4 border-b border-border">
-        {showLabels && (
-          <h1 className="text-lg font-semibold text-foreground whitespace-nowrap">pmix</h1>
-        )}
-        <button
-          onClick={toggleSidebar}
-          className="p-1.5 rounded-md hover:bg-sidebar-hover text-gray-600 hover:text-foreground transition-colors"
-          aria-label={isCollapsed ? 'Open sidebar' : 'Close sidebar'}
-        >
-          {isCollapsed ? (
-            <PanelLeftOpen className="w-5 h-5" stroke="1.5" />
-          ) : (
-            <PanelLeftClose className="w-5 h-5" stroke="1.5" />
+    <Stack gap="xs" h="100%" justify="space-between" bg="var(--sidebar-bg)">
+      {/* Top Section: Logo + Navigation */}
+      <Stack gap="xs">
+        {/* Logo / Brand */}
+        <Group h={64} px="md" justify="space-between" style={{ borderBottom: '1px solid var(--sidebar-border)' }}>
+          {sidebarOpen && (
+            <Group gap="sm">
+              <Box w={28} h={28} bg="blue.6" style={{ borderRadius: 6, display: 'grid', placeItems: 'center' }}>
+                <Text c="white" fw={800} size="xs">P</Text>
+              </Box>
+              <div>
+                <Text size="sm" fw={700} lh={1.1}>PMIX</Text>
+                <Text size="xs" c="dimmed">Marketing OS</Text>
+              </div>
+            </Group>
           )}
-        </button>
-      </div>
+          <ActionIcon
+            onClick={toggleSidebar}
+            variant="subtle"
+            size="lg"
+            aria-label={sidebarOpen ? 'Close sidebar' : 'Open sidebar'}
+          >
+            {sidebarOpen ? (
+              <PanelLeftClose size={20} />
+            ) : (
+              <PanelLeftOpen size={20} />
+            )}
+          </ActionIcon>
+        </Group>
 
-      <nav className="flex-1 px-3 py-4 space-y-1 overflow-y-auto sidebar-scroll">
-        {menuItems.map((item) => {
-          const isActive = pathname === item.href;
-          const Icon = item.icon;
-          return (
-            <Link
-              key={item.name}
-              href={item.href}
-              className={`flex items-center gap-3 px-3 py-2 rounded-md text-sm transition-colors ${
-                isActive
-                  ? 'bg-sidebar-hover text-foreground font-medium'
-                  : 'text-gray-600 hover:bg-sidebar-hover hover:text-foreground'
-              }`}
-              title={isCollapsed ? item.name : undefined}
-            >
-              <Icon className="w-4 h-4 flex-shrink-0" stroke="1.5" />
-              {showLabels && <span className="whitespace-nowrap">{item.name}</span>}
-            </Link>
-          );
-        })}
-      </nav>
+        {/* Navigation */}
+        <Stack gap={4} px="sm" mt="md">
+          {menuItems.map((item) => {
+            const isActive = pathname === item.href;
+            const Icon = item.icon;
+            
+            return (
+              <NavLink
+                key={item.name}
+                href={item.href}
+                active={isActive}
+                label={sidebarOpen ? item.name : undefined}
+                title={!sidebarOpen ? item.name : undefined}
+                leftSection={<Icon size={18} strokeWidth={1.5} />}
+                variant="subtle"
+                color="blue"
+                styles={{
+                  root: {
+                    borderRadius: 'var(--radius-md)',
+                    minHeight: 42,
+                    padding: sidebarOpen ? 'var(--space-2) var(--space-3)' : 'var(--space-2)',
+                    marginBottom: 'var(--space-1)',
+                    justifyContent: sidebarOpen ? 'flex-start' : 'center',
+                    '&:hover': {
+                      backgroundColor: 'var(--color-bg-tertiary)',
+                    },
+                  },
+                }}
+              />
+            );
+          })}
+        </Stack>
+      </Stack>
 
-      <div className="p-4 border-t border-border">
+      {/* Bottom Section: User Menu */}
+      <Divider my="xs" />
+      <div style={{ padding: 'var(--space-4)' }}>
         <UserMenu />
       </div>
-    </aside>
+    </Stack>
   );
 }

@@ -1,22 +1,25 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Inter } from "next/font/google";
 import { MantineProvider } from "@mantine/core";
 import { Notifications } from "@mantine/notifications";
+import { ThemeProvider } from "@/components/theme-provider";
+import "@mantine/core/styles.css";
+import "@mantine/notifications/styles.css";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+// Swiss Design Standard - Inter Font Family
+const inter = Inter({
   subsets: ["latin"],
+  variable: "--font-inter",
+  display: "swap",
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+// Import theme from centralized configuration
+import theme from "@/theme";
 
 export const metadata: Metadata = {
-  title: "pmix",
-  description: "pmix dashboard",
+  title: "PMIX - Marketing Automation Platform",
+  description: "Enterprise marketing automation dashboard",
 };
 
 export default function RootLayout({
@@ -27,16 +30,18 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${inter.variable} h-full antialiased`}
+      suppressHydrationWarning
     >
       <body
-        className="min-h-full flex bg-background text-foreground"
-        suppressHydrationWarning
+        style={{ minHeight: '100vh' }}
       >
-        <MantineProvider>
-          {children}
-          <Notifications position="bottom-right" />
-        </MantineProvider>
+        <ThemeProvider>
+          <MantineProvider theme={theme} defaultColorScheme="light">
+            {children}
+            <Notifications position="bottom-right" />
+          </MantineProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

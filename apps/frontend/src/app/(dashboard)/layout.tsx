@@ -1,7 +1,8 @@
 'use client';
 
-import Sidebar from '@/components/dashboard/sidebar';
+import { AppShell } from '@mantine/core';
 import { useUIStore } from '@/stores';
+import Sidebar from '@/components/dashboard/sidebar';
 
 export default function DashboardLayout({
   children,
@@ -11,15 +12,21 @@ export default function DashboardLayout({
   const sidebarOpen = useUIStore((state) => state.sidebarOpen);
 
   return (
-    <div className="flex min-h-screen">
-      <Sidebar />
-      <main
-        className={`flex-1 transition-all duration-300 ease-in-out ${
-          sidebarOpen ? 'ml-64' : 'ml-16'
-        }`}
-      >
+    <AppShell
+      navbar={{
+        width: sidebarOpen ? 256 : 64,
+        breakpoint: 'sm',
+        collapsed: { mobile: !sidebarOpen, desktop: false },
+      }}
+      padding={0}
+    >
+      <AppShell.Navbar p={0}>
+        <Sidebar />
+      </AppShell.Navbar>
+
+      <AppShell.Main style={{ background: 'var(--color-bg-secondary)', minHeight: '100vh' }}>
         {children}
-      </main>
-    </div>
+      </AppShell.Main>
+    </AppShell>
   );
 }

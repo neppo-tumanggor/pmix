@@ -1,5 +1,10 @@
 import * as React from "react";
 
+/**
+ * PMIX Design System - Label Component
+ * Swiss Design Standard - Clear, Accessible
+ */
+
 const Label = React.forwardRef<
   HTMLLabelElement,
   React.LabelHTMLAttributes<HTMLLabelElement>
@@ -7,7 +12,12 @@ const Label = React.forwardRef<
   return (
     <label
       ref={ref}
-      className={`text-sm font-medium text-gray-700 ${className || ''}`}
+      className={`
+        text-sm 
+        font-medium 
+        text-gray-700 
+        ${className || ''}
+      `}
       {...props}
     />
   );
