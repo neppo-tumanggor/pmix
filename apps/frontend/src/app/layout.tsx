@@ -35,6 +35,8 @@ export default function RootLayout({
     >
       <body
         style={{ minHeight: '100vh' }}
+        // Browser extensions can inject attributes before React hydrates this element.
+        suppressHydrationWarning
       >
         <ThemeProvider>
           <MantineProvider theme={theme} defaultColorScheme="light">

@@ -1,5 +1,6 @@
 import axios from 'axios';
-import { LoginRequest, LoginResponse, RefreshTokenRequest, RefreshTokenResponse } from '@/lib/types/auth';
+import type { LoginRequest, LoginResponse, RefreshTokenResponse } from '../types/auth';
+import { useAuthStore } from '../../stores';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:1457/api/v1';
 
@@ -53,7 +54,8 @@ apiClient.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config;
     
-    if (error.response?.status === 401 && !originalRequest._retry) {
+    const isPublicAuthRequest = ['/auth/login', '/auth/refresh'].includes(originalRequest?.url);
+    if (error.response?.status === 401 && originalRequest && !isPublicAuthRequest && !originalRequest._retry) {
       originalRequest._retry = true;
       
       try {
@@ -68,15 +70,11 @@ apiClient.interceptors.response.use(
 
           const { accessToken, refreshToken: newRefreshToken } = response.data.data;
 
-          // Update stored token
-          const nextAuthData = getStoredAuthState();
-          const merged = {
-            ...nextAuthData,
+          // Persist through the store so subsequent state changes keep the new tokens.
+          useAuthStore.setState({
             token: accessToken,
             refreshToken: newRefreshToken,
-          };
-
-          localStorage.setItem('auth-storage', JSON.stringify({ state: merged }));
+          });
 
           // Retry original request
           originalRequest.headers.Authorization = `Bearer ${accessToken}`;
@@ -85,10 +83,16 @@ apiClient.interceptors.response.use(
       } catch (refreshError) {
         // Refresh failed, redirect to login
         if (typeof window !== 'undefined') {
-          localStorage.removeItem('auth-storage');
+          useAuthStore.getState().logout();
           window.location.href = '/login';
         }
         return Promise.reject(refreshError);
+      }
+
+      // A session without a refresh token cannot recover from a 401.
+      if (typeof window !== 'undefined') {
+        useAuthStore.getState().logout();
+        window.location.href = '/login';
       }
     }
     

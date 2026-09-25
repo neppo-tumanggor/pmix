@@ -32,7 +32,7 @@ export class ProductsService {
   }
 
   async findAll(tenantId: string, query: ProductQueryDto) {
-    const page = query.page || PRODUCT_CONSTANTS.PAGE_SIZE;
+    const page = query.page || 1;
     const limit = query.limit || PRODUCT_CONSTANTS.PAGE_SIZE;
 
     const qb = this.productsRepository

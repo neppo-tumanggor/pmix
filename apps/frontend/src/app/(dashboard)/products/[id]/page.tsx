@@ -1,8 +1,9 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import { Container, Stack, Paper, Button, Group, Text, Badge, LoadingOverlay, Divider } from '@mantine/core';
+import { useParams, useRouter } from 'next/navigation';
+import { Container, Stack, Paper, Button, Group, Text, Badge, LoadingOverlay, Divider, Alert } from '@mantine/core';
+import { isAxiosError } from 'axios';
 import { ArrowLeft, Pencil, Trash2 } from 'lucide-react';
 import { notifications } from '@mantine/notifications';
 import { useDisclosure } from '@mantine/hooks';
@@ -44,13 +45,13 @@ const emptyForm: ProductFormData = {
 
 export default function ProductDetailPage() {
   const router = useRouter();
+  const { id: productId } = useParams<{ id: string }>();
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState<string | null>(null);
   const [form, setForm] = useState<ProductFormData>(emptyForm);
   const [dialogOpened, dialogHandlers] = useDisclosure(false);
   const [editModalOpened, { open: openEdit, close: closeEdit }] = useDisclosure(false);
-
-  const productId = typeof window !== 'undefined' ? window.location.pathname.split('/').pop() : '';
 
   useEffect(() => {
     if (productId) {
@@ -61,7 +62,8 @@ export default function ProductDetailPage() {
   const fetchProduct = async () => {
     try {
       setLoading(true);
-      const response = await apiClient.get(`/products/${productId}`);
+      setLoadError(null);
+      const response = await apiClient.get(`/products/${encodeURIComponent(productId)}`);
       const data = response.data;
       
       let productData: Product | null = null;
@@ -89,13 +91,12 @@ export default function ProductDetailPage() {
         router.push('/products');
       }
     } catch (error) {
-      console.error('Failed to fetch product:', error);
-      notifications.show({
-        title: 'Error',
-        message: 'Gagal memuat data product',
-        color: 'red',
-      });
-      router.push('/products');
+      const status = isAxiosError(error) ? error.response?.status : undefined;
+      setLoadError(status === 404
+        ? 'Produk tidak ditemukan atau tidak tersedia untuk akun Anda.'
+        : status
+          ? `Detail produk gagal dimuat (HTTP ${status}). Silakan coba lagi.`
+          : 'Tidak dapat terhubung ke layanan produk. Silakan coba lagi.');
     } finally {
       setLoading(false);
     }
@@ -114,7 +115,7 @@ export default function ProductDetailPage() {
         price: Number(form.price),
       };
 
-      await apiClient.put(`/products/${product.id}`, payload);
+      await apiClient.patch(`/products/${product.id}`, payload);
       
       notifications.show({
         title: 'Success',
@@ -175,6 +176,20 @@ export default function ProductDetailPage() {
     return (
       <Container size="lg" py="lg">
         <LoadingOverlay visible={loading} />
+      </Container>
+    );
+  }
+
+  if (loadError) {
+    return (
+      <Container size="lg" py="lg">
+        <Alert color="red" title="Detail produk belum dapat ditampilkan">
+          <Text size="sm">{loadError}</Text>
+          <Group mt="md">
+            <Button variant="default" onClick={() => router.push('/products')}>Kembali ke daftar produk</Button>
+            <Button variant="light" onClick={() => void fetchProduct()}>Coba lagi</Button>
+          </Group>
+        </Alert>
       </Container>
     );
   }

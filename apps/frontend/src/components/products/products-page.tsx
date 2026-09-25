@@ -4,11 +4,12 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { 
   Container, Stack, Paper, Button, Modal, TextInput, Textarea, 
-  NumberInput, Checkbox, Group, Table, ActionIcon, Badge, LoadingOverlay, Text
+  NumberInput, Checkbox, Group, Table, ActionIcon, Badge, LoadingOverlay, Text, Alert
 } from '@mantine/core';
 import { PageHeader } from '@/components/layout/page-header';
 import { useDisclosure } from '@mantine/hooks';
-import { Notifications, notifications } from '@mantine/notifications';
+import { notifications } from '@mantine/notifications';
+import { isAxiosError } from 'axios';
 import { Trash2, Plus, Pencil } from 'lucide-react';
 import apiClient from '@/lib/api/auth';
 
@@ -49,6 +50,7 @@ export default function ProductsPage() {
   const router = useRouter();
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState<string | null>(null);
   const [editing, setEditing] = useState<Product | null>(null);
   const [form, setForm] = useState<ProductFormData>(emptyForm);
   const [deleteId, setDeleteId] = useState<string | null>(null);
@@ -63,6 +65,7 @@ export default function ProductsPage() {
   const fetchProducts = async () => {
     try {
       setLoading(true);
+      setLoadError(null);
       const response = await apiClient.get('/products');
       const data = response.data;
       
@@ -80,9 +83,18 @@ export default function ProductsPage() {
       setProducts(productsList);
     } catch (error) {
       console.error('Failed to fetch products:', error);
+      const status = isAxiosError(error) ? error.response?.status : undefined;
+      const message = status === 401
+        ? 'Sesi login tidak valid. Silakan login kembali.'
+        : status === 403
+          ? 'Akun Anda tidak memiliki akses ke data produk.'
+          : status
+            ? `Permintaan data produk gagal (HTTP ${status}). Silakan coba lagi.`
+            : 'Tidak dapat terhubung ke layanan produk. Periksa koneksi lalu coba lagi.';
+      setLoadError(message);
       notifications.show({
         title: 'Error',
-        message: 'Gagal memuat data products',
+        message,
         color: 'red',
       });
     } finally {
@@ -120,7 +132,7 @@ export default function ProductsPage() {
       };
 
       if (editing) {
-        await apiClient.patch('/products/', payload);
+        await apiClient.patch(`/products/${editing.id}`, payload);
       } else {
         await apiClient.post('/products', payload);
       }
@@ -181,7 +193,14 @@ export default function ProductsPage() {
         <Paper shadow='sm' p='md' radius='md' withBorder pos='relative'>
           <LoadingOverlay visible={loading} />
           
-          {!loading && products.length === 0 ? (
+          {loadError ? (
+            <Alert color="red" title="Produk belum dapat ditampilkan">
+              <Text size="sm">{loadError}</Text>
+              <Button mt="sm" variant="light" onClick={() => void fetchProducts()} loading={loading}>
+                Coba lagi
+              </Button>
+            </Alert>
+          ) : !loading && products.length === 0 ? (
             <Text c='dimmed' ta='center' py='xl'>
               No products found
             </Text>
